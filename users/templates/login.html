@@ -1,0 +1,35 @@
+{% include 'Navbar.html' %}
+
+{% if page == 'Register' %}
+
+<h1>Register User</h1>
+<form method="POST">
+    {% csrf_token %}
+    
+
+    {{form.username.label}}
+    {{form.username}}
+    {{form.first_name.label}}
+    {{form.first_name}}
+    {{form.password1.label}}
+    {{form.password1}}
+    {{form.password2.label}}
+    {{form.password2}}
+
+    <input type="submit" value="Register User">
+</form>
+<p>Already have an account <a href="{% url 'LoginUser' %}">Sign In</a></p>
+
+
+{% else %}
+
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="username" placeholder="Username" />
+    <input type="password" name="password" placeholder="Enter password" />
+    <input type="submit" value="Login" />
+
+    <p>Don't have an account <a href="{% url 'registerUser' %}">Sign up</a></p>
+    <p><a href="">Forget Password?</a></p>
+</form>
+{% endif %}

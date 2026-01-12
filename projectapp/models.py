@@ -1,0 +1,40 @@
+from django.db import models
+import uuid
+from users.models import Profile
+# Create your models here.
+
+class Movie(models.Model):
+    owner=models.ForeignKey(Profile,null=True,blank=True,on_delete=models.SET_NULL)
+    id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)
+    title = models.CharField(max_length=100)
+    desc = models.TextField()
+    tag = models.ManyToManyField('Tag', blank=True)
+    demo_link=models.CharField(max_length=2000,null=True,blank=True)
+    source_link=models.CharField(max_length=2000,null=True,blank=True)
+    created=models.DateTimeField(auto_now_add=True)
+    vote_total=models.IntegerField(default=0,null=True,blank=True)
+    vote_ratio=models.IntegerField(default=0,null=True,blank=True)
+    image_path = models.ImageField(null=True,blank=True,upload_to='ProfileImages/',default='Default.jpg')
+    
+    def __str__ (self):
+        return self.title
+    
+class Review(models.Model):
+    vote_type = [('up','up_vote'),('down','down_vote')]
+    project_title = models.ForeignKey(Movie,on_delete=models.CASCADE)
+    body=models.TextField(null=True,blank=True)
+    value=models.CharField(max_length=100,choices=vote_type)
+    created=models.DateTimeField(auto_now_add=True)
+    id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)
+    
+    def __str__(self):
+        return str(self.project_title)
+    
+class Tag(models.Model):
+    name=models.CharField(max_length=200)
+    created=models.DateTimeField(auto_now_add=True)
+    id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)
+    
+    def __str__(self):
+        return self.name
+    

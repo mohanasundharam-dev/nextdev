@@ -1,0 +1,16 @@
+{% include 'navbar.html' %}
+<div class="user-profile-card">
+
+   <img src="{{ profile_image.url }}" alt="Profile Img">
+    <span>{{user_profile.name}}</span>
+    <span>{{user_profile.short_intro}}</span>
+    <span>{{user_profile.}}</span>
+
+    {% for i in user_profile.skill_set.all %}
+    {{i}}
+    {% endfor %}
+    <a href="{{user_profile.email}}">Email</a>
+    <a href="{{user_profile.social_linkedin}}">Linkedin</a>
+    <a href="{{user_profile.social_github}}">GitHub</a>
+
+</div>

@@ -1,0 +1,9 @@
+<form method="POST">
+    {% csrf_token %}
+
+    <label>{{FormData.title}}</label>
+    <p>Yes,Sure!</p>
+    <button name="action" value="Confirm">Confirm</button>
+    <p>No!</p>
+    <button name="action" value="NO">NO</button>
+</form>

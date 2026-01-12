@@ -1,0 +1,48 @@
+{% block content %}
+
+
+
+<div class="Search-Section">
+    <div class="search-title">
+        <h1><span class="title-span">SEARCH FOR </span>PROJECTS</h1>
+    </div>
+    <div class="search-box">
+        <form class="form-search">
+            <input type="text" placeholder="search for project title">
+            <button class="btn-search">Search</button>
+        </form>
+    </div>
+</div>
+<div class="main-box">
+    {% for x in data %}
+    <div class="main-box-card">
+        <a href="{% url 'project' x.id %}">
+            <div class="project-image">
+                <img src="{{ x.image_path.url }}">
+            </div>
+        </a>
+        <div class="card-data">
+            <h4>{{ x.title }}</h4>
+            <p class="owner">By {{ x.owner |title }}</p>
+            <p>{{ x.vote_ratio }}% Positive Feedback ({{ x.vote_total }} Votes)</p>
+            <div class="card-tag">
+
+                {% for tag in x.tag.all %}
+                <span>{{ tag }}</span>
+                 {% endfor %}
+            </div>
+
+
+           
+
+            <div class="card-btn">
+                <a href="{% url 'update_project' x.id %}">Edit</a>
+                <a href="{% url 'delete_project' x.id %}">Delete</a>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,15 @@
+{% include 'navbar.html' %}
+<div class="profile-card">
+    {% for x in Profiles %}
+    <a href="profiles/{{x.id}}">
+        <div>
+            <div>
+                <img src="{{ x.profile_image.url }}" alt="">
+            </div>
+            <div>
+                {{x.name}}
+            </div>
+        </div>
+    </a>
+    {% endfor %}
+</div>
