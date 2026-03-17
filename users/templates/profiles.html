@@ -1,15 +1,51 @@
 {% include 'navbar.html' %}
+{% load static %}
 <div class="profile-card">
     {% for x in Profiles %}
-    <a href="profiles/{{x.id}}">
+
+    <div class="single-card">
         <div>
-            <div>
+            <div class="img-area">
                 <img src="{{ x.profile_image.url }}" alt="">
-            </div>
-            <div>
-                {{x.name}}
+                <div class="tick-img">
+                    <img src="{% static 'images/Tick1.png' %}">
+                </div>
             </div>
         </div>
-    </a>
+
+
+        <div class="profile-datatag">
+            <div class="user-deatails">
+                <p>{{x.name|title}}</p>
+            </div>
+            <div>
+                <p>{{x.role}}</p>
+            </div>
+
+            <div class="card-links">
+                <div>
+                    <a href="{{ x.social_linkedin }}" style="background: #4267b2" target="_blank" class="link">
+                        <i class="fa-brands fa-square-linkedin"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ x.social_instagram }}" style="background: #e1306c" target="_blank" class="link">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ x.social_github }}" style="background:  #211F1F" target="_blank" class="link">
+                        <i class="fa-brands fa-square-github"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="view-btn">
+                <a href="profiles/{{x.id}}"><button type="button">View Profile</button></a>
+            </div>
+        </div>
+
+    </div>
+    <!-- <a href="profiles/{{x.id}}"> -->
+
     {% endfor %}
 </div>

@@ -1,16 +1,785 @@
 {% include 'navbar.html' %}
-<div class="user-profile-card">
+{% if user.is_authenticated and not user.is_superuser and user.profile == user_profile %}
+<a href="{% url 'EditProfile' %}" class="edit-btn">
+    Edit Profile
+</a>
+{% endif %}
+{% block content %}
+{% load static %}
+<div class="wrap">
 
-   <img src="{{ profile_image.url }}" alt="Profile Img">
-    <span>{{user_profile.name}}</span>
-    <span>{{user_profile.short_intro}}</span>
-    <span>{{user_profile.}}</span>
+    <!-- HERO BANNER -->
+    <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-accent"></div>
+        <div class="hero-accent2"></div>
+        <div class="hero-top">
+            <div class="av-ring">
+                <img src="{{ user_profile.profile_image.url }}" alt="{{ user_profile.name }}" class="av-img">
+            </div>
+            <div class="hero-info">
+                <div class="hero-name">{{ user_profile.name|title }}</div>
+                <div class="hero-role">{{ user_profile.short_intro }}</div>
+                <div class="hero-badges">
+                    <span class="hbadge hb-green">{{ user_profile.get_status_display }}</span>
+                    <span class="hbadge hb-purple">Joined {{ user_profile.created|date:"M Y" }}</span>
+                    {% if user_profile.skill_set.count > 5 %}
+                    <span class="hbadge hb-amber">Top contributor</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% if user.is_authenticated and not user.is_superuser and user.profile == user_profile %}
+            <div style="padding-bottom:12px">
+                <a href="{% url 'EditProfile' %}" class="edit-hero-btn">Edit profile</a>
 
-    {% for i in user_profile.skill_set.all %}
-    {{i}}
-    {% endfor %}
-    <a href="{{user_profile.email}}">Email</a>
-    <a href="{{user_profile.social_linkedin}}">Linkedin</a>
-    <a href="{{user_profile.social_github}}">GitHub</a>
+            </div>
+            {% endif %}
+        </div>
+        <div class="hero-stats">
+            <div class="hstat">
+                <div class="hstat-num">{{ user_profile.project_set.count }}</div>
+                <div class="hstat-lbl">Projects</div>
+            </div>
+            <div class="hstat">
+                <div class="hstat-num">{{ views }}</div>
+                <div class="hstat-lbl">Views</div>
+            </div>
+            <div class="hstat">
+                <div class="hstat-num">{{ user_profile.skill_set.count }}</div>
+                <div class="hstat-lbl">Skills</div>
+            </div>
+            <div class="hstat">
+                <div class="hstat-num">4.9</div>
+                <div class="hstat-lbl">Rating</div>
+            </div>
+        </div>
+    </div>
 
+    <!-- BODY GRID -->
+    <div class="body-grid">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar-profile">
+
+            <!-- Social links -->
+            <div class="scard">
+                <div class="sc-title">Connect</div>
+                <div class="socials-grid">
+
+                    {% if user_profile.social_linkedin %}
+                    <a class="sol" href="{{ user_profile.social_linkedin }}" target="_blank">
+                        <div class="sol-dot" style="background:#0A66C2">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </div>
+                        <span class="sol-name">LinkedIn</span>
+                    </a>
+                    {% endif %}
+                    {% if user_profile.social_github %}
+                    <a class="sol" href="{{ user_profile.social_github }}" target="_blank">
+                        <div class="sol-dot" style="background:#24292e">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+                                <path
+                                    d="M12 2C6.48 2 2 6.58 2 12.26c0 4.53 2.87 8.37 6.84 9.73.5.09.68-.22.68-.49v-1.7c-2.78.62-3.37-1.37-3.37-1.37-.45-1.17-1.11-1.48-1.11-1.48-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85 0 1.7.12 2.5.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9v2.82c0 .27.18.59.69.49C19.14 20.63 22 16.79 22 12.26 22 6.58 17.52 2 12 2z" />
+                            </svg>
+                        </div>
+                        <span class="sol-name">GitHub</span>
+                    </a>
+                    {% endif %}
+                    {% if user_profile.social_instagram %}
+                    <a class="sol" href="{{ user_profile.social_instagram }}" target="_blank">
+                        <div class="sol-dot" style="background:#E1306C">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="20" rx="5" />
+                                <circle cx="12" cy="12" r="4" />
+                                <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none" />
+                            </svg>
+                        </div>
+                        <span class="sol-name">Instagram</span>
+                    </a>
+                    {% endif %}
+                    {% if user_profile.social_leetcode %}
+                    <a class="sol" href="{{ user_profile.social_leetcode }}" target="_blank">
+                        <div class="sol-dot" style="background:#f1c22f">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#333">
+                                <path
+                                    d="M16.1 4.1l-9 9a1 1 0 0 0 0 1.4l4 4a1 1 0 0 0 1.4 0l9-9a1 1 0 0 0 0-1.4l-4-4a1 1 0 0 0-1.4 0z" />
+                            </svg>
+                        </div>
+                        <span class="sol-name">LeetCode</span>
+                    </a>
+                    {% endif %}
+                    {% if user_profile.social_hackerrank %}
+                    <a class="sol" href="{{ user_profile.social_hackerrank }}" target="_blank">
+                        <div class="sol-dot" style="background:#00EA64">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="#1a1a1a">
+                                <path d="M12 2L2 7v10l10 5 10-5V7z" />
+                            </svg>
+                        </div>
+                        <span class="sol-name">HackerRank</span>
+                    </a>
+                    {% endif %}
+                    {% if user_profile.portfolio %}
+                    <a class="sol" href="{{ user_profile.portfolio }}" target="_blank">
+                        <div class="sol-dot" style="background:#6366f1">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                                <polyline points="15 3 21 3 21 9" />
+                                <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>
+                        </div>
+                        <span class="sol-name">Portfolio</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact info -->
+        <div class="scard">
+            <div class="sc-title">Contact</div>
+            <div class="info-rows">
+                <div class="ir">
+                    <div class="ir-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <rect x="2" y="4" width="20" height="16" rx="2" />
+                            <path d="M2 8l10 6 10-6" />
+                        </svg>
+                    </div>
+                    <div class="ir-text"><a href="mailto:{{ user_profile.email }}">{{ user_profile.email }}</a>
+                    </div>
+                </div>
+                <div class="ir">
+                    <div class="ir-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg>
+                    </div>
+                    <div class="ir-text">{{ user_profile.location|default:"Location not set" }}</div>
+                </div>
+                <div class="ir">
+                    <div class="ir-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <path d="M16 2v4M8 2v4M3 10h18" />
+                        </svg>
+                    </div>
+                    <div class="ir-text">Joined {{ user_profile.created|date:"F Y" }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="scard">
+            <div class="sc-title">Skills</div>
+            <div class="skill-cloud">
+                {% for skill in user_profile.skill_set.all %}
+                <span class="sk {% if forloop.counter <= 3 %}hi{% endif %}">{{ skill.name }}</span>
+                {% empty %}
+                <span style="font-size:13px;color:#94a3b8">No skills listed yet.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MAIN COLUMN -->
+    <div class="main-col">
+
+        <!-- Available banner -->
+        
+        <div class="avail-banner">
+            <div class="avail-dot"></div>
+            <div>
+                <div class="avail-text">Available for opportunities</div>
+                <div class="avail-sub">Full-time &amp; freelance · Remote preferred</div>
+            </div>
+            <a href="mailto:{{ user_profile.email }}" class="avail-btn">Hire me</a>
+        </div>
+        
+
+        <!-- Bio -->
+        <div class="mcard">
+            <div class="mc-header">
+                <span class="mc-title">About me</span>
+            </div>
+            <div class="bio-block">{{ user_profile.bio }}</div>
+        </div>
+
+        <!-- Projects -->
+        <div class="mcard">
+            <div class="mc-header">
+                <span class="mc-title">Projects</span>
+                <a class="mc-link" href="#">View all →</a>
+            </div>
+            <div class="proj-grid">
+                {% for project in user_profile.project_set.all %}
+                <div class="pcard">
+                    {% if project.featured_image %}
+                    <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" class="pthumb-img">
+                    {% else %}
+                    <div class="pthumb" style="background:#EEF2FF">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="3" />
+                            <path d="M3 9h18M9 21V9" />
+                        </svg>
+                        <span class="pthumb-label {% if project.demo_link %}live{% else %}wip{% endif %}">
+                            {% if project.demo_link %}Live{% else %}In progress{% endif %}
+                        </span>
+                    </div>
+                    {% endif %}
+                    <div class="pbody">
+                        <div class="ptitle">{{ project.title }}</div>
+                        <div class="pdesc">{{ project.description|truncatewords:18 }}</div>
+                        <div class="ptags">
+                            {% for tag in project.tags.all %}
+                            <span class="ptag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="pfooter">
+                        {% if project.source_link %}<a class="plink" href="{{ project.source_link }}"
+                            target="_blank">GitHub</a>{% endif %}
+                        {% if project.demo_link %}<a class="plink" href="{{ project.demo_link }}" target="_blank">Live
+                            demo</a>{% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p style="font-size:13px;color:#94a3b8;grid-column:1/3">No projects added yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
 </div>
+</div>
+{% endblock %}
+
+
+
+<style>
+    .wrap {
+        max-width: 980px;
+        margin: 30px auto;
+        padding: 0 20px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* ── HERO ── */
+    .hero {
+        background: #0f172a;
+        border-radius: 16px;
+        padding: 32px 32px 0;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-bg {
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(45deg, rgba(255, 255, 255, .02) 0, rgba(255, 255, 255, .02) 1px, transparent 1px, transparent 12px);
+        pointer-events: none;
+    }
+
+    .hero-accent {
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: rgba(99, 102, 241, .15);
+        pointer-events: none;
+    }
+
+    .hero-accent2 {
+        position: absolute;
+        bottom: -40px;
+        left: 20%;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: rgba(20, 184, 166, .1);
+        pointer-events: none;
+    }
+
+    .hero-top {
+        display: flex;
+        gap: 24px;
+        align-items: flex-end;
+        position: relative;
+        z-index: 1;
+    }
+
+    .av-ring {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #14b8a6);
+        padding: 3px;
+        flex-shrink: 0;
+    }
+
+    .av-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .hero-info {
+        flex: 1;
+        padding-bottom: 8px;
+    }
+
+    .hero-name {
+        font-size: 24px;
+        font-weight: 700;
+        color: #f1f5f9;
+        letter-spacing: -.3px;
+    }
+
+    .hero-role {
+        font-size: 14px;
+        color: #94a3b8;
+        margin-top: 4px;
+    }
+
+    .hero-badges {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+
+    .hbadge {
+        font-size: 11px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-weight: 500;
+    }
+
+    .hb-green {
+        background: rgba(20, 184, 166, .2);
+        color: #5eead4;
+    }
+
+    .hb-purple {
+        background: rgba(99, 102, 241, .2);
+        color: #a5b4fc;
+    }
+
+    .hb-amber {
+        background: rgba(251, 191, 36, .15);
+        color: #fcd34d;
+    }
+
+    .hero-stats {
+        display: flex;
+        gap: 0;
+        border-top: 1px solid rgba(255, 255, 255, .08);
+        margin-top: 24px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hstat {
+        flex: 1;
+        padding: 16px 0;
+        text-align: center;
+        border-right: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .hstat:last-child {
+        border-right: none;
+    }
+
+    .hstat-num {
+        font-size: 20px;
+        font-weight: 700;
+        color: #f1f5f9;
+    }
+
+    .hstat-lbl {
+        font-size: 11px;
+        color: #64748b;
+        margin-top: 2px;
+    }
+
+    .edit-hero-btn {
+        font-size: 12px;
+        padding: 8px 18px;
+        border-radius: 8px;
+        background: #6366f1;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    /* ── LAYOUT ── */
+    .body-grid {
+        display: grid;
+        grid-template-columns: 290px 1fr;
+        gap: 20px;
+    }
+
+    .sidebar-profile {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .main-col {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* ── SHARED CARD ── */
+    .scard,
+    .mcard {
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        border-radius: 14px;
+        padding: 20px;
+    }
+
+    .sc-title {
+        font-size: 11px;
+        font-weight: 600;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: .06em;
+        margin-bottom: 14px;
+    }
+
+    .mc-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .mc-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .mc-link {
+        font-size: 12px;
+        color: #6366f1;
+        text-decoration: none;
+    }
+
+    /* ── SOCIALS ── */
+    .socials-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    .sol {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 9px 11px;
+        border-radius: 10px;
+        border: 1px solid #e8e8e8;
+        text-decoration: none;
+        transition: background .15s;
+    }
+
+    .sol:hover {
+        background: #f8fafc;
+    }
+
+    .sol-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .sol-name {
+        font-size: 12px;
+        font-weight: 500;
+        color: #0f172a;
+    }
+
+    /* ── CONTACT ── */
+    .info-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ir {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .ir-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .ir-text {
+        font-size: 13px;
+        color: #475569;
+    }
+
+    .ir-text a {
+        color: #6366f1;
+        text-decoration: none;
+    }
+
+    .ir-text a:hover {
+        text-decoration: underline;
+    }
+
+    /* ── SKILLS ── */
+    .skill-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .sk {
+        font-size: 12px;
+        padding: 5px 12px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+        background: #f8fafc;
+    }
+
+    .sk.hi {
+        background: #EEF2FF;
+        color: #4338ca;
+        border-color: #c7d2fe;
+    }
+
+    /* ── AVAILABLE BANNER ── */
+    .avail-banner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 20px;
+        border-radius: 12px;
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+    }
+
+    .avail-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #22c55e;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .avail-dot::after {
+        content: '';
+        position: absolute;
+        inset: -3px;
+        border-radius: 50%;
+        border: 2px solid #86efac;
+        animation: pulse 1.5s ease infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1)
+        }
+
+        50% {
+            opacity: .5;
+            transform: scale(1.3)
+        }
+    }
+
+    .avail-text {
+        font-size: 13px;
+        font-weight: 600;
+        color: #166534;
+    }
+
+    .avail-sub {
+        font-size: 12px;
+        color: #4ade80;
+        margin-top: 1px;
+    }
+
+    .avail-btn {
+        margin-left: auto;
+        font-size: 12px;
+        padding: 7px 16px;
+        border-radius: 8px;
+        background: #22c55e;
+        color: #fff;
+        text-decoration: none;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+    /* ── BIO ── */
+    .bio-block {
+        font-size: 14px;
+        color: #475569;
+        line-height: 1.75;
+    }
+
+    .bio-hl {
+        color: #0f172a;
+        font-weight: 600;
+    }
+
+    /* ── PROJECTS ── */
+    .proj-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .pcard {
+        border: 1px solid #e8e8e8;
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: border-color .2s;
+    }
+
+    .pcard:hover {
+        border-color: #c7d2fe;
+    }
+
+    .pthumb {
+        height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .pthumb-img {
+        width: 100%;
+        height: 110px;
+        object-fit: cover;
+    }
+
+    .pthumb-label {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .live {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .wip {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .pbody {
+        padding: 14px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .ptitle {
+        font-size: 13px;
+        font-weight: 600;
+        color: #0f172a;
+    }
+
+    .pdesc {
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.5;
+        flex: 1;
+    }
+
+    .ptags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+
+    .ptag {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        background: #EEF2FF;
+        color: #4338ca;
+    }
+
+    .pfooter {
+        display: flex;
+        gap: 8px;
+        padding: 10px 14px;
+        border-top: 1px solid #f1f5f9;
+        align-items: center;
+    }
+
+    .plink {
+        font-size: 12px;
+        color: #6366f1;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .plink:hover {
+        text-decoration: underline;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+        .body-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .proj-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-top {
+            flex-wrap: wrap;
+        }
+    }
+</style>

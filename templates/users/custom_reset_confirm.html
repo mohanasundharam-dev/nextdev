@@ -1,0 +1,51 @@
+<!-- {% include 'Navbar.html' %}
+<div class="reset-container">
+    <h2>Set Your New Password</h2>
+
+    {% if validlink %}
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            <label>New Password</label>
+            {{ form.new_password1 }}
+            {{ form.new_password1.errors }}
+        </div>
+
+        <div>
+            <label>Confirm Password</label>
+            {{ form.new_password2 }}
+            {{ form.new_password2.errors }}
+        </div>
+
+        <button type="submit">Change Password</button>
+    </form>
+
+    {% else %}
+    <p>This reset link is invalid or expired.</p>
+    {% endif %}
+</div> -->
+
+{% include 'Navbar.html' %}
+
+<div class="reset-container">
+    <h2>Set Your New Password</h2>
+
+    {% if validlink %}
+        <form method="post">
+            {% csrf_token %}
+
+            <label>New Password</label>
+            {{ form.new_password1 }}
+
+            <label>Confirm Password</label>
+            {{ form.new_password2 }}
+
+            <button type="submit">
+                Change Password
+            </button>
+        </form>
+    {% else %}
+        <p>This reset link is invalid or expired.</p>
+    {% endif %}
+</div>

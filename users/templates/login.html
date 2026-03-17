@@ -1,35 +1,71 @@
 {% include 'Navbar.html' %}
 
-{% if page == 'Register' %}
+<div class="auth-container">
+    <div class="auth-card">
 
-<h1>Register User</h1>
-<form method="POST">
-    {% csrf_token %}
-    
+        {% if page == 'Register' %}
 
-    {{form.username.label}}
-    {{form.username}}
-    {{form.first_name.label}}
-    {{form.first_name}}
-    {{form.password1.label}}
-    {{form.password1}}
-    {{form.password2.label}}
-    {{form.password2}}
+            <h2 class="auth-title">Register User</h2>
 
-    <input type="submit" value="Register User">
-</form>
-<p>Already have an account <a href="{% url 'LoginUser' %}">Sign In</a></p>
+            <form method="POST">
+                {% csrf_token %}
 
+                <div class="auth-field">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                </div>
 
-{% else %}
+                <div class="auth-field">
+                    {{ form.first_name.label_tag }}
+                    {{ form.first_name }}
+                </div>
 
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Username" />
-    <input type="password" name="password" placeholder="Enter password" />
-    <input type="submit" value="Login" />
+                <div class="auth-field">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                </div>
 
-    <p>Don't have an account <a href="{% url 'registerUser' %}">Sign up</a></p>
-    <p><a href="">Forget Password?</a></p>
-</form>
-{% endif %}
+                <div class="auth-field">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                </div>
+
+                <button type="submit" class="auth-btn">Register</button>
+            </form>
+
+            <p class="auth-switch">
+                Already have an account?
+                <a href="{% url 'LoginUser' %}">Sign In</a>
+            </p>
+
+        {% else %}
+
+            <h2 class="auth-title">Login</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="auth-field">
+                    <input type="text" name="username" placeholder="Username" />
+                </div>
+
+                <div class="auth-field">
+                    <input type="password" name="password" placeholder="Enter password" />
+                </div>
+
+                <button type="submit" class="auth-btn">Login</button>
+            </form>
+
+            <p class="auth-switch">
+                Don't have an account?
+                <a href="{% url 'registerUser' %}">Sign up</a>
+            </p>
+
+            <p class="auth-forgot">
+                <a href="{% url 'password_reset' %}">Forget Password?</a>
+            </p>
+
+        {% endif %}
+
+    </div>
+</div>

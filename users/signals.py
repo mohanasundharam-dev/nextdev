@@ -1,31 +1,44 @@
-from .models import Profile
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save,post_delete
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
+from .models import Profile
 
-def createProfile(sender,instance,created,**kwargs):
-    if created:
-        profile = Profile.objects.create(
-            user=instance,
-            name=instance.username,
-            email=instance.email,
-        )
-        
-        subject = "Welcome to DevSearch"
-        message="We are Glad you here!"
-        
+
+@receiver(post_save, sender=User)
+def createProfile(sender, instance, created, **kwargs):
+    if not created:
+        return
+
+    # ❌ Skip superusers & staff
+    if instance.is_superuser or instance.is_staff:
+        return
+
+    profile = Profile.objects.create(
+        user=instance,
+        name=instance.username,
+        email=instance.email,
+    )
+
+    # ✅ Email must NEVER break logic
+    if settings.DEBUG:
+        return
+
+    try:
         send_mail(
-            subject,
-            message,
+            "Welcome to DevSearch",
+            "We are glad you're here!",
             settings.EMAIL_HOST_USER,
             [profile.email],
-            fail_silently=False,
+            fail_silently=True,
         )
-def deleteUser(sender,instance,**kwargs):
-    user=instance.user
-    user.delete()
+    except Exception:
+        pass
 
-post_save.connect(createProfile,sender=User)
-post_delete.connect(deleteUser,sender=Profile)
+
+@receiver(post_delete, sender=Profile)
+def deleteUser(sender, instance, **kwargs):
+    # ✅ Safe delete check
+    if instance.user and not instance.user.is_superuser:
+        instance.user.delete()

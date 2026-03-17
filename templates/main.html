@@ -1,48 +1,254 @@
+{% load static %}
+
 {% block content %}
 
+<div class="wrap">
 
-
-<div class="Search-Section">
+  <!-- SEARCH SECTION -->
+  <div class="search-section">
     <div class="search-title">
-        <h1><span class="title-span">SEARCH FOR </span>PROJECTS</h1>
+      <h1><span>Search</span> Projects</h1>
     </div>
-    <div class="search-box">
-        <form class="form-search">
-            <input type="text" placeholder="search for project title">
-            <button class="btn-search">Search</button>
-        </form>
+
+    <form class="filter-bar" method="GET" action="{% url 'home' %}">
+      <div class="filter-input">
+        <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>
+        </svg>
+        <span class="fi-label">Project</span>
+        <input class="fi-input" type="text" name="q" placeholder="Search project name..." value="{{ search }}">
+      </div>
+      <div class="sep"></div>
+      <div class="filter-input">
+        <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span class="fi-label">User</span>
+        <input class="fi-input" type="text" name="user" placeholder="Search by username..." value="{{ search_user }}">
+      </div>
+      <div class="sep"></div>
+      <div class="filter-input">
+        <svg class="fi-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+          <line x1="7" y1="7" x2="7.01" y2="7"/>
+        </svg>
+        <span class="fi-label">Skill</span>
+        <input class="fi-input" type="text" name="tag" placeholder="Search by skill / tag..." value="{{ search_tag }}">
+      </div>
+      <button type="submit" class="search-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        Search
+      </button>
+    </form>
+  </div>
+
+  <!-- RESULTS META -->
+  <div class="results-meta">
+    <span class="results-count">
+      <span class="count-num">{{ data|length }}</span> project{{ data|length|pluralize }} found
+    </span>
+    <div class="sort-row">
+      <button class="sort-btn active">Latest</button>
+      <button class="sort-btn">Most Voted</button>
+      <button class="sort-btn">A–Z</button>
     </div>
-</div>
-<div class="main-box">
+  </div>
+
+  <!-- PROJECT GRID -->
+  <div class="proj-grid">
     {% for x in data %}
-    <div class="main-box-card">
-        <a href="{% url 'project' x.id %}">
-            <div class="project-image">
-                <img src="{{ x.image_path.url }}">
-            </div>
-        </a>
-        <div class="card-data">
-            <h4>{{ x.title }}</h4>
-            <p class="owner">By {{ x.owner |title }}</p>
-            <p>{{ x.vote_ratio }}% Positive Feedback ({{ x.vote_total }} Votes)</p>
-            <div class="card-tag">
-
-                {% for tag in x.tag.all %}
-                <span>{{ tag }}</span>
-                 {% endfor %}
-            </div>
-
-
-           
-
-            <div class="card-btn">
-                <a href="{% url 'update_project' x.id %}">Edit</a>
-                <a href="{% url 'delete_project' x.id %}">Delete</a>
-            </div>
+    <div class="pcard">
+      <a href="{% url 'project' x.id %}" class="pcard-img-link">
+        <div class="pcard-img">
+          {% if x.image_path %}
+          <img src="{{ x.image_path.url }}" alt="{{ x.title }}">
+          {% else %}
+          <div class="pcard-img-placeholder">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5">
+              <rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
+          {% endif %}
+          <div class="vote-pill {% if x.vote_ratio >= 70 %}vote-good{% else %}vote-low{% endif %}">
+            <div class="vote-dot"></div>
+            {{ x.vote_ratio }}% · {{ x.vote_total }} vote{{ x.vote_total|pluralize }}
+          </div>
         </div>
+      </a>
+      <div class="pcard-body">
+        <a href="{% url 'project' x.id %}" class="pcard-title">{{ x.title }}</a>
+        <div class="pcard-owner">
+          <div class="owner-av">{{ x.owner|title|slice:":2" }}</div>
+          By {{ x.owner|title }}
+        </div>
+        <div class="pcard-tags">
+          {% for tag in x.tag.all %}
+          <span class="ptag">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="pcard-footer">
+        <a href="{% url 'update_project' x.id %}" class="btn-edit">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Edit
+        </a>
+        <button class="btn-del" onclick="document.getElementById('del-{{ x.id }}').classList.add('show')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          </svg>
+          Delete
+        </button>
+      </div>
+    </div>
 
+    <!-- DELETE MODAL -->
+    <div class="del-overlay" id="del-{{ x.id }}">
+      <div class="del-box">
+        <div class="del-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </div>
+        <div class="del-title">Delete project?</div>
+        <div class="del-sub">Are you sure you want to delete <strong>{{ x.title }}</strong>? This action cannot be undone.</div>
+        <form method="POST" action="{% url 'delete_project' x.id %}">
+          {% csrf_token %}
+          <div class="del-actions">
+            <button type="submit" name="action" value="Confirm" class="btn-danger">Yes, delete</button>
+            <button type="button" class="btn-cancel" onclick="document.getElementById('del-{{ x.id }}').classList.remove('show')">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+      <div class="empty-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </div>
+      <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:6px">No projects found</div>
+      <div style="font-size:13px;color:#94a3b8">Try adjusting your search filters</div>
     </div>
     {% endfor %}
+  </div>
+
 </div>
 
 {% endblock content %}
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px; font-family: 'Inter', sans-serif; }
+
+/* ── SEARCH ── */
+.search-section { margin-bottom: 32px; }
+.search-title { text-align: center; margin-bottom: 22px; }
+.search-title h1 { font-size: 28px; font-weight: 700; color: #0f172a; letter-spacing: -.5px; }
+.search-title h1 span { color: #6366f1; }
+.search-title p { font-size: 14px; color: #94a3b8; margin-top: 6px; }
+
+.filter-bar { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 6px; display: flex; gap: 6px; align-items: center; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+.filter-input { flex: 1; display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; border: 1px solid transparent; transition: border-color .15s, background .15s; }
+.filter-input:focus-within { background: #fff; border-color: #c7d2fe; }
+.fi-icon { width: 15px; height: 15px; flex-shrink: 0; color: #94a3b8; }
+.fi-label { font-size: 11px; font-weight: 600; color: #94a3b8; white-space: nowrap; }
+.fi-input { border: none; outline: none; font-size: 13px; color: #0f172a; background: transparent; width: 100%; font-family: inherit; }
+.fi-input::placeholder { color: #cbd5e1; }
+.sep { width: 1px; height: 32px; background: #e2e8f0; flex-shrink: 0; }
+.search-btn { display: flex; align-items: center; gap: 6px; padding: 10px 22px; background: #6366f1; color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: inherit; transition: background .15s; }
+.search-btn:hover { background: #4f46e5; }
+.search-btn svg { width: 14px; height: 14px; }
+
+/* ── RESULTS META ── */
+.results-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.results-count { font-size: 13px; color: #64748b; }
+.count-num { font-weight: 600; color: #0f172a; }
+.sort-row { display: flex; gap: 6px; }
+.sort-btn { font-size: 12px; padding: 5px 12px; border-radius: 8px; border: 1px solid #e2e8f0; background: #fff; color: #64748b; cursor: pointer; font-family: inherit; transition: all .15s; }
+.sort-btn.active, .sort-btn:hover { background: #EEF2FF; color: #4338ca; border-color: #c7d2fe; }
+
+/* ── PROJECT GRID ── */
+.proj-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+.pcard { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
+.pcard:hover { border-color: #c7d2fe; transform: translateY(-2px); }
+
+.pcard-img-link { display: block; }
+.pcard-img { position: relative; height: 160px; overflow: hidden; background: #EEF2FF; display: flex; align-items: center; justify-content: center; }
+.pcard-img img { width: 100%; height: 100%; object-fit: cover; }
+.pcard-img-placeholder { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+
+.vote-pill { position: absolute; top: 10px; left: 10px; font-size: 11px; padding: 3px 9px; border-radius: 999px; font-weight: 600; background: rgba(255,255,255,.92); display: flex; align-items: center; gap: 5px; }
+.vote-good { color: #16a34a; }
+.vote-low  { color: #b45309; }
+.vote-dot  { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+.vote-low .vote-dot { background: #f59e0b; }
+
+.pcard-body { padding: 16px; flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.pcard-title { font-size: 14px; font-weight: 600; color: #0f172a; text-decoration: none; display: block; line-height: 1.4; }
+.pcard-title:hover { color: #6366f1; }
+.pcard-owner { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748b; }
+.owner-av { width: 20px; height: 20px; border-radius: 50%; background: #EEF2FF; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: #4338ca; flex-shrink: 0; }
+.pcard-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.ptag { font-size: 11px; padding: 3px 8px; border-radius: 6px; background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+
+.pcard-footer { padding: 12px 16px; border-top: 1px solid #f1f5f9; display: flex; gap: 8px; }
+.btn-edit { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; padding: 7px; border-radius: 8px; background: #EEF2FF; color: #4338ca; text-decoration: none; font-weight: 500; transition: background .15s; }
+.btn-edit:hover { background: #e0e7ff; }
+.btn-del { flex: 1; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 12px; padding: 7px; border-radius: 8px; background: #fef2f2; color: #dc2626; border: none; font-weight: 500; cursor: pointer; font-family: inherit; transition: background .15s; }
+.btn-del:hover { background: #fee2e2; }
+
+/* ── DELETE MODAL ── */
+.del-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.5); z-index: 200; align-items: center; justify-content: center; }
+.del-overlay.show { display: flex; }
+.del-box { background: #fff; border-radius: 16px; padding: 28px; max-width: 380px; width: 90%; text-align: center; }
+.del-icon { width: 48px; height: 48px; border-radius: 50%; background: #fef2f2; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.del-title { font-size: 16px; font-weight: 700; color: #0f172a; margin-bottom: 8px; }
+.del-sub { font-size: 13px; color: #64748b; line-height: 1.5; margin-bottom: 22px; }
+.del-actions { display: flex; gap: 10px; }
+.btn-danger { flex: 1; padding: 10px; border-radius: 10px; background: #ef4444; color: #fff; border: none; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
+.btn-danger:hover { background: #dc2626; }
+.btn-cancel { flex: 1; padding: 10px; border-radius: 10px; background: #f1f5f9; color: #475569; border: none; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; }
+.btn-cancel:hover { background: #e2e8f0; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; padding: 60px 20px; grid-column: 1 / 4; }
+.empty-icon { width: 56px; height: 56px; border-radius: 16px; background: #EEF2FF; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .proj-grid { grid-template-columns: repeat(2, 1fr); }
+  .empty-state { grid-column: 1 / 3; }
+}
+@media (max-width: 600px) {
+  .filter-bar { flex-direction: column; border-radius: 14px; }
+  .sep { width: 100%; height: 1px; }
+  .proj-grid { grid-template-columns: 1fr; }
+  .empty-state { grid-column: 1; }
+}
+</style>
+
+<script>
+document.querySelectorAll('.sort-btn').forEach(b => {
+  b.addEventListener('click', function() {
+    document.querySelectorAll('.sort-btn').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('.del-overlay').forEach(o => {
+  o.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('show');
+  });
+});
+</script>

@@ -3,30 +3,96 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://api.fontshare.com/v2/css?f[]=public-sans@400&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=plus-jakarta-sans@400&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 {% block navbar %}
+
 <header>
     <div class="main-nav">
+
+        <!-- LOGO -->
         <div class="logo">
-            <img src="{% static 'images/logo1.jpg' %}" alt="Logo">
+            <img src="{% static 'images/logo1.jpg' %}" alt="">
+            <h4>NextDev.</h4>
         </div>
-        <div class="nav-link">
-            <nav>
-                <a href="{% url 'home' %}">Projects</a>
-                <a href="">Developer</a>
-                <a href="{% url 'CreateProject' %}">Add Project</a>
 
-                {% if request.user.is_authenticated %}
-                <a href="{% url 'LogoutUser' %}"><button class="nav-btn">Logout</button></a>
-                <a href="{% url 'Account' %}"><button class="nav-btn">Account</button></a>
-                {% else %}
-                <a href="{% url 'LoginUser' %}"><button class="nav-btn">Login</button></a>
+        <!-- MOBILE MENU TOGGLE -->
+        <input type="checkbox" id="menuToggle" hidden>
+        <label for="menuToggle" class="menu-icon">
+            <i class="fa-solid fa-bars"></i>
+        </label>
 
-                {% endif %}
-            </nav>
+        <!-- NAV MENU -->
+        <div class="nav-menu">
+
+            <label for="menuToggle" class="close-menu">
+                <i class="fa-solid fa-xmark"></i>
+            </label>
+
+            <a href="{% url 'home' %}">Projects</a>
+            <a href="{% url 'profiles' %}">Developer</a>
+
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'CreateProject' %}">Add Project</a>
+            <a href="{% url 'LogoutUser' %}">
+                <button class="nav-btn">Logout</button>
+            </a>
+
+            <!-- USER SIDEBAR -->
+            <input type="checkbox" id="toggleSidebar" hidden>
+
+            <label for="toggleSidebar" class="user-btn">
+                <i class="fa-regular fa-circle-user"></i>
+            </label>
+
+            <label for="toggleSidebar" class="overlay"></label>
+
+            <aside class="sidebar">
+                <label for="toggleSidebar" class="close-btn">✖</label>
+
+                <div class="profile">
+                    <i class="fa-regular fa-circle-user"></i>
+                    <h4>{{ user.username }}</h4>
+                    <p>{{ user.Email_ddress }}</p>
+                </div>
+
+                <ul>
+                    <a href="{% url 'my-profile' %}">
+                        <li>Edit Profile</li>
+                    </a>
+                    <a href="{% url 'view_project' %}">
+                        <li>My Projects</li>
+                    </a>
+                    <li>Settings</li>
+                    <li>
+                        <a href="{% url 'LogoutUser' %}">
+                            <button class="nav-btn logout-btn">Logout</button>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            {% else %}
+            <a href="{% url 'LoginUser' %}">
+                <button class="nav-btn">Login</button>
+            </a>
+            {% endif %}
         </div>
     </div>
+
+    <!-- MOBILE OVERLAY -->
+    <label for="menuToggle" class="overlay-mobile"></label>
 </header>
 
 {% if messages %}

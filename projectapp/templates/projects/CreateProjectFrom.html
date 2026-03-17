@@ -1,12 +1,63 @@
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <!-- {{ FormData }} -->
-    {% for x in FormData %}
+{% load static %}
 
-    <div>{{x.label}}</div>
-    <div>{{x}}</div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Project</title>
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head>
+
+<body>
+    <div class="form-title-wrapper">
+        <h2 class="form-title">
+            {% if is_edit %}
+            Edit Project
+            {% else %}
+            Create Project
+            {% endif %}
+        </h2>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" class="project-form two-column" novalidate>
+        {% csrf_token %}
+
+        {% for field in FormData %}
+        <div class="form-group
+    {% if field.name == 'desc' or field.name == 'project_file' %}
+        span-3
+    {% elif field.name == 'demo_link' or field.name == 'source_link' %}
+        span-2
+    {% endif %}
+">
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+                {% if field.field.required %}
+                <span class="required">*</span>
+                {% endif %}
+            </label>
+
+            {{ field }}
+
+            {% if field.help_text %}
+            <small class="helptext">{{ field.help_text }}</small>
+            {% endif %}
+
+            {% if field.errors %}
+            <ul class="errorlist">
+                {% for error in field.errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="submit-btn">Submit</button>
+    </form>
 
 
-    {% endfor %}
-    <button type="submit">Submit</button>
-</form>
+</body>
+
+</html>

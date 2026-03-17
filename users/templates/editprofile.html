@@ -1,0 +1,126 @@
+{% include 'navbar.html' %}
+
+<div class="settings-wrapper">
+
+    <div class="settings-card">
+
+        <!-- HEADER -->
+        <div class="settings-header">
+            {% if user.profile.profile_image %}
+            <img src="{{ user.profile.profile_image.url }}" class="profile-avatar">
+            {% endif %}
+            <div>
+                <h2>Edit Profile</h2>
+                <p>Update your personal information and social links</p>
+            </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="settings-split">
+
+                <!-- LEFT PANEL -->
+                <div class="settings-panel">
+                    <h4>Basic Information</h4>
+
+                    <div class="field">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                    </div>
+                    
+
+                    <!-- USERNAME FIELD -->
+                    <div class="field">
+                        <label>Username</label>
+                        <input type="text" name="username" value="{{ request.user.username }}">
+
+                        {% if form.username.errors %}
+                        <small class="error">
+                            {{ form.username.errors.0 }}
+                        </small>
+                        {% endif %}
+                    </div>
+
+                    <div class="field">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.role.label_tag }}
+                        {{ form.role }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.status.label_tag }}
+                        {{ form.status }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.short_intro.label_tag }}
+                        {{ form.short_intro }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.bio.label_tag }}
+                        {{ form.bio }}
+                    </div>
+
+                    <div class="field pic">
+                        {{ form.profile_image.label_tag }}
+                        {{ form.profile_image }}
+                    </div>
+
+                </div>
+
+                <!-- RIGHT PANEL -->
+                <div class="settings-panel">
+                    <h4>Social & Portfolio</h4>
+
+                    <div class="field">
+                        {{ form.social_github.label_tag }}
+                        {{ form.social_github }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.social_linkedin.label_tag }}
+                        {{ form.social_linkedin }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.social_instagram.label_tag }}
+                        {{ form.social_instagram }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.social_leetcode.label_tag }}
+                        {{ form.social_leetcode }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.social_hackerrank.label_tag }}
+                        {{ form.social_hackerrank }}
+                    </div>
+
+                    <div class="field">
+                        {{ form.portfolio.label_tag }}
+                        {{ form.portfolio }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- SAVE BUTTON -->
+            <div class="save-bar">
+                <button type="submit" class="btn-primary">
+                    Save Changes
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
