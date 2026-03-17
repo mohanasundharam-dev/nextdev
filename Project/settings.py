@@ -155,3 +155,5 @@ EMAIL_HOST_USER = "mohantamillife@gmail.com"
 EMAIL_HOST_PASSWORD = "pzwartlrjxzwguab"
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
