@@ -56,6 +56,8 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'Project.urls'
+APPEND_SLASH = True
+DEBUG = True
 
 TEMPLATES = [
     {
