@@ -62,7 +62,7 @@ DEBUG = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': ['templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,4 +156,4 @@ EMAIL_HOST_PASSWORD = "pzwartlrjxzwguab"
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates']
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'templates/']
