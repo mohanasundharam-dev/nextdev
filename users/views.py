@@ -91,7 +91,7 @@ def LoginUser(request):
         else:
             messages.error(request, 'Invalid username/email or password')
 
-    return render(request, 'login.html', {"page": page})
+    return render(request, 'users/login.html', {"page": page})
 
 
 def LogoutUser(request):
@@ -143,7 +143,7 @@ def registerUser(request):
             messages.error (request,'An error has occurred during registration')            
 
     context={'page':page,'form':form}
-    return render(request,'login.html',context)
+    return render(request, 'users/login.html', context)
 
 @login_required
 def CreateProfile(request):
