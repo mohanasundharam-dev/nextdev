@@ -25,14 +25,14 @@ def profiles(request):
     context = {
         "Profiles": qs
     }
-    return render(request, 'profiles.html', context)
+    return render(request, 'users/profiles.html', context)
 
 def user_profile(request, i):
     Profile.objects.filter(id=i).update(views=F('views') + 1)
         
     profile = get_object_or_404(Profile, id=i)
     
-    return render(request, 'user_profile.html', {
+    return render(request, 'users/user_profile.html', {
         'user_profile': profile,
         'views': profile.views,
     })
@@ -42,7 +42,7 @@ def user_profile(request, i):
 #     if request.user.is_authenticated:
 #         return redirect('profiles')
     
-#     if request.method == 'POST':
+#     if request.method == 'P~~OST':
 #         username = request.POST.get('username')
 #         password = request.POST.get('password')
 #         try:
@@ -78,7 +78,7 @@ def LoginUser(request):
                 username = user_obj.username
             except User.DoesNotExist:
                 messages.error(request, 'Invalid username/email or password')
-                return render(request, 'login.html', {"page": page})
+                return render(request, 'users/login.html', {"page": page})
         else:
             username = username_input
 
@@ -99,8 +99,6 @@ def LogoutUser(request):
     messages.success(request,'User was logged out!')
     return redirect('LoginUser')
 
-def account():
-    pass
 
 # def registerUser(request):
 #     page="Register"
@@ -159,7 +157,7 @@ def CreateProfile(request):
             form.save()
             return redirect('profile')
 
-    return render(request, 'profile.html', {'form': form})
+    return render(request, 'users/profile.html', {'form': form})
 
 # @login_required
 # def EditProfile(request):
@@ -179,9 +177,9 @@ def CreateProfile(request):
 
 @login_required
 def my_profile(request):
-    user_profile = request.user.profile
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
 
-    return render(request, 'user_profile.html', {
+    return render(request, 'users/user_profile.html', {
         'user_profile': user_profile,
         'views': user_profile.views,
     })
@@ -192,7 +190,7 @@ from .forms import ProfileForm
 @login_required
 def EditProfile(request):
 
-    profile = request.user.profile
+    profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == "POST":
 
@@ -215,6 +213,6 @@ def EditProfile(request):
     else:
         form = ProfileForm(instance=profile)
 
-    return render(request, "editprofile.html", {
+    return render(request, "users/editprofile.html", {
         "form": form
     })
