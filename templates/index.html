@@ -5,18 +5,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <title>NextDev — The Developer Platform & Project Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.3">
 </head>
 
+<body>
+    {% include 'navbar.html' %}
 
-<body style="background-color:white;">
-    {% include 'Navbar.html'%}
+    <main style="flex: 1;">
+        {% include 'main.html' %}
+    </main>
 
-    {% include 'main.html' %}
-
-
-    <p>Footer</p>
+    <!-- MODERN FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <h4>NextDev</h4>
+                <p>A modern developer ecosystem to discover, share, and showcase groundbreaking projects and connect with world-class engineers.</p>
+            </div>
+            <div class="footer-col">
+                <h5>Platform</h5>
+                <ul>
+                    <li><a href="{% url 'home' %}">Browse Projects</a></li>
+                    <li><a href="{% url 'profiles' %}">Explore Developers</a></li>
+                    <li><a href="{% url 'CreateProject' %}">Publish Project</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Account</h5>
+                <ul>
+                    {% if request.user.is_authenticated %}
+                    <li><a href="{% url 'my-profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'view_project' %}">My Projects</a></li>
+                    <li><a href="{% url 'EditProfile' %}">Settings</a></li>
+                    {% else %}
+                    <li><a href="{% url 'LoginUser' %}">Sign In</a></li>
+                    <li><a href="{% url 'registerUser' %}">Create Account</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h5>Community</h5>
+                <ul>
+                    <li><a href="https://github.com" target="_blank"><i class="fa-brands fa-github"></i> GitHub</a></li>
+                    <li><a href="https://twitter.com" target="_blank"><i class="fa-brands fa-x-twitter"></i> Twitter</a></li>
+                    <li><a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin"></i> LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 NextDev Inc. Crafted with passion for the developer community.</p>
+            <p>Designed for high performance and modern web standards.</p>
+        </div>
+    </footer>
 </body>
 
 </html>

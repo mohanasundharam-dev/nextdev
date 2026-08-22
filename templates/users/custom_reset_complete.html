@@ -1,10 +1,41 @@
-{% include 'Navbar.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="reset-container">
-    <h2>Password Changed Successfully</h2>
-    <p>Your password has been updated.</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Complete — NextDev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head>
 
-    <a href="{% url 'LoginUser' %}">
-        Login Now
-    </a>
-</div>
+<body>
+    {% include 'navbar.html' %}
+
+    <main class="auth-container">
+        <div class="auth-card" style="text-align:center;">
+            <div class="auth-brand-icon" style="background:linear-gradient(135deg, #10b981, #059669);">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+
+            <h2 class="auth-title">Password Changed!</h2>
+            <p class="auth-subtitle">Your password has been reset successfully. You can now sign in with your new credentials.</p>
+
+            <a href="{% url 'LoginUser' %}" class="auth-btn" style="display:inline-flex; align-items:center; justify-content:center; text-decoration:none;">
+                <span>Sign In to NextDev</span>
+                <i class="fa-solid fa-arrow-right" style="margin-left:8px;"></i>
+            </a>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bottom" style="margin-top:0; border-top:none;">
+            <p>&copy; 2026 NextDev Security Center.</p>
+        </div>
+    </footer>
+</body>
+</html>

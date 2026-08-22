@@ -1,71 +1,139 @@
-{% include 'Navbar.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="auth-container">
-    <div class="auth-card">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page == 'Register' %}Sign Up{% else %}Sign In{% endif %} — NextDev</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.1">
+</head>
 
-        {% if page == 'Register' %}
+<body>
+    {% include 'navbar.html' %}
 
-            <h2 class="auth-title">Register User</h2>
+    <main class="auth-container">
+        <div class="auth-card">
 
-            <form method="POST">
+            <div class="auth-brand-icon">
+                <i class="fa-solid fa-code"></i>
+            </div>
+
+            {% if page == 'Register' %}
+
+            <h2 class="auth-title">Create your account</h2>
+            <p class="auth-subtitle">Join thousands of developers sharing and building on NextDev.</p>
+
+            <form method="POST" novalidate>
                 {% csrf_token %}
 
                 <div class="auth-field">
-                    {{ form.username.label_tag }}
+                    <label>{{ form.username.label }}</label>
                     {{ form.username }}
+                    {% if form.username.errors %}
+                    <small style="color:#ef4444; font-size:0.75rem;">{{ form.username.errors.0 }}</small>
+                    {% endif %}
                 </div>
 
                 <div class="auth-field">
-                    {{ form.first_name.label_tag }}
+                    <label>{{ form.first_name.label }}</label>
                     {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                    <small style="color:#ef4444; font-size:0.75rem;">{{ form.first_name.errors.0 }}</small>
+                    {% endif %}
                 </div>
 
                 <div class="auth-field">
-                    {{ form.password1.label_tag }}
+                    <label>{{ form.password1.label }}</label>
                     {{ form.password1 }}
+                    {% if form.password1.errors %}
+                    <small style="color:#ef4444; font-size:0.75rem;">{{ form.password1.errors.0 }}</small>
+                    {% endif %}
                 </div>
 
                 <div class="auth-field">
-                    {{ form.password2.label_tag }}
+                    <label>{{ form.password2.label }}</label>
                     {{ form.password2 }}
+                    {% if form.password2.errors %}
+                    <small style="color:#ef4444; font-size:0.75rem;">{{ form.password2.errors.0 }}</small>
+                    {% endif %}
                 </div>
 
-                <button type="submit" class="auth-btn">Register</button>
+                <button type="submit" class="auth-btn">
+                    <span>Create Account</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </form>
 
             <p class="auth-switch">
                 Already have an account?
-                <a href="{% url 'LoginUser' %}">Sign In</a>
+                <a href="{% url 'LoginUser' %}">Sign in</a>
             </p>
 
-        {% else %}
+            {% else %}
 
-            <h2 class="auth-title">Login</h2>
+            <h2 class="auth-title">Welcome back</h2>
+            <p class="auth-subtitle">Sign in with your username or email address.</p>
 
             <form method="POST">
                 {% csrf_token %}
 
                 <div class="auth-field">
-                    <input type="text" name="username" placeholder="Username" />
+                    <label>Username or Email</label>
+                    <input type="text" name="username" placeholder="developer@domain.com or username" required autofocus />
                 </div>
 
                 <div class="auth-field">
-                    <input type="password" name="password" placeholder="Enter password" />
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label>Password</label>
+                        <a href="{% url 'password_reset' %}" style="font-size:0.78rem; color:#6366f1; font-weight:600;">Forgot?</a>
+                    </div>
+                    <input type="password" name="password" placeholder="••••••••" required />
                 </div>
 
-                <button type="submit" class="auth-btn">Login</button>
+                <button type="submit" class="auth-btn">
+                    <span>Sign In</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </form>
 
             <p class="auth-switch">
                 Don't have an account?
-                <a href="{% url 'registerUser' %}">Sign up</a>
+                <a href="{% url 'registerUser' %}">Sign up for free</a>
             </p>
 
-            <p class="auth-forgot">
-                <a href="{% url 'password_reset' %}">Forget Password?</a>
-            </p>
+            {% endif %}
 
-        {% endif %}
+        </div>
+    </main>
 
-    </div>
-</div>
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-bottom" style="margin-top:0; border-top:none;">
+            <p>&copy; 2026 NextDev Security &amp; Identity.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
+
+<style>
+    .auth-brand-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin: 0 auto 16px;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+</style>

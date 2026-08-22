@@ -1,51 +1,108 @@
 {% load static %}
-{% include 'navbar.html' %}
-<div class="profile-card">
-    {% for x in Profiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developers — NextDev Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.1">
+    <link rel="stylesheet" href="{% static 'css/profiles.css' %}?v=2.1">
+</head>
 
-    <div class="single-card">
-        <div>
-            <div class="img-area">
-                <img src="{{ x.profile_image.url }}" alt="">
-                <div class="tick-img">
-                    <img src="{% static 'images/Tick1.png' %}">
-                </div>
+<body>
+    {% include 'navbar.html' %}
+
+    <main class="profiles-container">
+        <!-- HEADER / HERO -->
+        <div class="profiles-header">
+            <div class="profiles-tag">
+                <i class="fa-solid fa-code-commit"></i> Talent Network
             </div>
+            <h1>Meet Exceptional <span class="gradient-text">Developers</span></h1>
+            <p>Discover and collaborate with talented software engineers, analysts, and designers building the future.</p>
         </div>
 
+        <!-- DEVELOPER CARDS GRID -->
+        <div class="profile-card-grid">
+            {% for x in Profiles %}
+            <article class="single-profile-card">
+                <div class="card-top-bg"></div>
 
-        <div class="profile-datatag">
-            <div class="user-deatails">
-                <p>{{x.name|title}}</p>
-            </div>
-            <div>
-                <p>{{x.role}}</p>
-            </div>
-
-            <div class="card-links">
-                <div>
-                    <a href="{{ x.social_linkedin }}" style="background: #4267b2" target="_blank" class="link">
-                        <i class="fa-brands fa-square-linkedin"></i>
-                    </a>
+                <div class="avatar-wrapper">
+                    {% if x.profile_image %}
+                    <img src="{{ x.profile_image.url }}" alt="{{ x.name }}" class="profile-img">
+                    {% else %}
+                    <div class="profile-avatar-fallback">{{ x.name|slice:":2"|upper|default:"DEV" }}</div>
+                    {% endif %}
+                    <div class="verified-tick" title="Verified Developer">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
                 </div>
-                <div>
-                    <a href="{{ x.social_instagram }}" style="background: #e1306c" target="_blank" class="link">
+
+                <div class="developer-info">
+                    <h3 class="developer-name">{{ x.name|title|default:x.user.username }}</h3>
+                    <span class="developer-role">{{ x.role|default:"Full-Stack Developer" }}</span>
+                    {% if x.short_intro %}
+                    <p class="developer-bio">{{ x.short_intro|truncatewords:10 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- SOCIAL LINKS -->
+                <div class="card-social-links">
+                    {% if x.social_github %}
+                    <a href="{{ x.social_github }}" target="_blank" class="social-icon-btn github" title="GitHub">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    {% endif %}
+                    {% if x.social_linkedin %}
+                    <a href="{{ x.social_linkedin }}" target="_blank" class="social-icon-btn linkedin" title="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in"></i>
+                    </a>
+                    {% endif %}
+                    {% if x.social_instagram %}
+                    <a href="{{ x.social_instagram }}" target="_blank" class="social-icon-btn instagram" title="Instagram">
                         <i class="fa-brands fa-instagram"></i>
                     </a>
+                    {% endif %}
+                    {% if x.social_leetcode %}
+                    <a href="{{ x.social_leetcode }}" target="_blank" class="social-icon-btn leetcode" title="LeetCode">
+                        <i class="fa-solid fa-code"></i>
+                    </a>
+                    {% endif %}
+                    {% if x.portfolio %}
+                    <a href="{{ x.portfolio }}" target="_blank" class="social-icon-btn portfolio" title="Portfolio">
+                        <i class="fa-solid fa-globe"></i>
+                    </a>
+                    {% endif %}
                 </div>
-                <div>
-                    <a href="{{ x.social_github }}" style="background:  #211F1F" target="_blank" class="link">
-                        <i class="fa-brands fa-square-github"></i>
+
+                <!-- VIEW PROFILE BUTTON -->
+                <div class="card-footer-btn">
+                    <a href="{% url 'user-profile' x.id %}" class="btn-profile-view">
+                        <span>View Profile</span>
+                        <i class="fa-solid fa-arrow-right"></i>
                     </a>
                 </div>
+            </article>
+            {% empty %}
+            <div class="empty-state-box" style="grid-column: 1 / -1; margin: 40px auto; max-width: 500px;">
+                <div class="empty-icon-wrap"><i class="fa-solid fa-user-group"></i></div>
+                <h3>No Developers Found</h3>
+                <p>There are no developer profiles registered yet.</p>
             </div>
-            <div class="view-btn">
-                <a href="profiles/{{x.id}}"><button type="button">View Profile</button></a>
-            </div>
+            {% endfor %}
         </div>
+    </main>
 
-    </div>
-    <!-- <a href="profiles/{{x.id}}"> -->
-
-    {% endfor %}
-</div>
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-bottom" style="margin-top:0; border-top:none;">
+            <p>&copy; 2026 NextDev Community. Empowering software builders.</p>
+        </div>
+    </footer>
+</body>
+</html>

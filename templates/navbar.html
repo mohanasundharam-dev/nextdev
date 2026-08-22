@@ -1,92 +1,112 @@
 {% load static %}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-<link href="https://api.fontshare.com/v2/css?f[]=public-sans@400&display=swap" rel="stylesheet">
-<link href="https://api.fontshare.com/v2/css?f[]=plus-jakarta-sans@400&display=swap" rel="stylesheet">
-<link href="https://api.fontshare.com/v2/css?f[]=gambetta@400,500,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.3">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 
 {% block navbar %}
 
 <header>
+    <!-- MOBILE MENU TOGGLE CHECKBOX -->
+    <input type="checkbox" id="menuToggle" hidden>
+
     <div class="main-nav">
+        <!-- BRAND LOGO -->
+        <a href="{% url 'home' %}" class="logo">
+            <div class="logo-icon">
+                <i class="fa-solid fa-code"></i>
+            </div>
+            <h4>NextDev</h4>
+            <span class="logo-badge">Pro</span>
+        </a>
 
-        <!-- LOGO -->
-        <div class="logo">
-            <img src="{% static 'images/logo1.jpg' %}" alt="">
-            <h4>NextDev.</h4>
-        </div>
-
-        <!-- MOBILE MENU TOGGLE -->
-        <input type="checkbox" id="menuToggle" hidden>
-        <label for="menuToggle" class="menu-icon">
+        <label for="menuToggle" class="menu-icon" aria-label="Open Menu">
             <i class="fa-solid fa-bars"></i>
         </label>
 
         <!-- NAV MENU -->
         <div class="nav-menu">
-
-            <label for="menuToggle" class="close-menu">
+            <label for="menuToggle" class="close-menu" aria-label="Close Menu">
                 <i class="fa-solid fa-xmark"></i>
             </label>
 
-            <a href="{% url 'home' %}">Projects</a>
-            <a href="{% url 'profiles' %}">Developer</a>
-
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'CreateProject' %}">Add Project</a>
-            <a href="{% url 'LogoutUser' %}">
-                <button class="nav-btn">Logout</button>
+            <a href="{% url 'home' %}" class="nav-link">
+                <i class="fa-solid fa-layer-group"></i>
+                Projects
+            </a>
+            <a href="{% url 'profiles' %}" class="nav-link">
+                <i class="fa-solid fa-users"></i>
+                Developers
             </a>
 
-            <!-- USER SIDEBAR -->
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'CreateProject' %}" class="nav-btn">
+                <i class="fa-solid fa-plus"></i>
+                New Project
+            </a>
+
+            <!-- USER SIDEBAR TOGGLE -->
             <input type="checkbox" id="toggleSidebar" hidden>
 
-            <label for="toggleSidebar" class="user-btn">
-                <i class="fa-regular fa-circle-user"></i>
+            <label for="toggleSidebar" class="user-btn" title="User Menu">
+                <i class="fa-regular fa-user"></i>
             </label>
 
             <label for="toggleSidebar" class="overlay"></label>
 
             <aside class="sidebar">
-                <label for="toggleSidebar" class="close-btn">✖</label>
+                <div class="sidebar-header">
+                    <h3>Account Menu</h3>
+                    <label for="toggleSidebar" class="close-btn"><i class="fa-solid fa-xmark"></i></label>
+                </div>
 
                 <div class="profile">
-                    <i class="fa-regular fa-circle-user"></i>
+                    <i class="fa-solid fa-circle-user"></i>
                     <h4>{{ user.username }}</h4>
-                    <p>{{ user.Email_ddress }}</p>
+                    <p>{{ user.email|default:user.username }}</p>
                 </div>
 
                 <ul>
-                    <a href="{% url 'my-profile' %}">
-                        <li>Edit Profile</li>
-                    </a>
-                    <a href="{% url 'view_project' %}">
-                        <li>My Projects</li>
-                    </a>
-                    <li>Settings</li>
                     <li>
-                        <a href="{% url 'LogoutUser' %}">
-                            <button class="nav-btn logout-btn">Logout</button>
+                        <a href="{% url 'my-profile' %}">
+                            <i class="fa-regular fa-id-badge"></i> My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'EditProfile' %}">
+                            <i class="fa-solid fa-user-pen"></i> Edit Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'view_project' %}">
+                            <i class="fa-solid fa-folder-open"></i> My Projects
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'CreateProject' %}">
+                            <i class="fa-solid fa-circle-plus"></i> Create Project
                         </a>
                     </li>
                 </ul>
+
+                <div class="sidebar-footer">
+                    <a href="{% url 'LogoutUser' %}">
+                        <button class="logout-btn">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                            Logout
+                        </button>
+                    </a>
+                </div>
             </aside>
 
             {% else %}
             <a href="{% url 'LoginUser' %}">
-                <button class="nav-btn">Login</button>
+                <button class="nav-btn">
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                    Sign In
+                </button>
             </a>
             {% endif %}
         </div>
@@ -98,16 +118,16 @@
 
 {% if messages %}
 <div class="message-box">
-    <span class="message-icon"><i class="fa-regular fa-user"></i></span>
-    {% if messages %}
-    <span class="messages">
+    <div class="message-icon">
+        <i class="fa-solid fa-bell"></i>
+    </div>
+    <div class="messages">
         {% for message in messages %}
-        <span {% if message.tags %} class="toast {{ message.tags }}" {% endif %}>
+        <div class="toast {{ message.tags|default:'info' }}">
             <p class="text-message">{{ message }}</p>
-        </span>
+        </div>
         {% endfor %}
-    </span>
-    {% endif %}
+    </div>
 </div>
 {% endif %}
 

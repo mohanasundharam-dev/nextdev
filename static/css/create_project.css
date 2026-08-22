@@ -1,0 +1,220 @@
+/* ============================================================
+   CREATE / EDIT PROJECT FORM  —  create_project.css
+   ============================================================ */
+
+.form-page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 36px 24px 80px;
+  font-family: var(--font-main);
+  flex: 1;
+}
+
+.form-header-area {
+  margin-bottom: 28px;
+}
+
+.form-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.6px;
+  margin-top: 14px;
+}
+
+.form-subtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+/* ── FORM CARD ── */
+.modern-project-card-form {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.form-grid-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 20px;
+}
+
+.form-group-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group-block.col-full {
+  grid-column: 1 / -1;
+}
+
+.form-group-block.col-half {
+  grid-column: span 1;
+}
+
+/* Label */
+.form-field-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-required {
+  color: #ef4444;
+}
+
+/* Inputs & Widgets */
+.input-wrap input[type="text"],
+.input-wrap input[type="url"],
+.input-wrap input[type="email"],
+.input-wrap input[type="number"],
+.input-wrap textarea,
+.input-wrap select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: #0f172a;
+  transition: all 0.2s ease;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.input-wrap input:focus,
+.input-wrap textarea:focus,
+.input-wrap select:focus {
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+.input-wrap textarea {
+  min-height: 120px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.input-wrap input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  background: #f8fafc;
+  font-size: 0.85rem;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.input-wrap input[type="file"]:hover {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+/* Helper and Error text */
+.field-helper {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.field-error-list {
+  list-style: none;
+  margin-top: 6px;
+}
+
+.field-error-list li {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── ACTION BAR ── */
+.form-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.btn-cancel-action {
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-cancel-action:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.btn-submit-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #ffffff;
+  border: none;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-submit-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 680px) {
+  .modern-project-card-form {
+    padding: 20px;
+  }
+
+  .form-grid-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group-block.col-half {
+    grid-column: 1 / -1;
+  }
+
+  .form-action-bar {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel-action, .btn-submit-action {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}

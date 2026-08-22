@@ -1,65 +1,130 @@
-{% block content %}
-{% include 'Navbar.html'%}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="Search-Section">
-    <div class="search-title">
-        <h1><span class="title-span">SEARCH FOR </span>PROJECTS</h1>
-    </div>
-    <div class="search-box">
-        <form class="form-search" method="GET" action="{% url 'home' %}">
-            <input type="text" name="q" placeholder="Search for project title" value="{{ search }}">
-            <button type="submit" class="btn-search">Search</button>
-        </form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects — NextDev Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.1">
+    <link rel="stylesheet" href="{% static 'css/projectslist.css' %}?v=2.1">
+</head>
 
-    </div>
-</div>
-<div class="main-box">
-    {% for x in data %}
-    <div class="main-box-card">
-        <a href="{% url 'project' x.id %}">
-            <div class="project-image">
-                <img src="{{ x.image_path.url }}">
+<body>
+    {% include 'navbar.html' %}
+
+    <main class="dashboard-wrapper">
+
+        <!-- DASHBOARD HEADER -->
+        <div class="dashboard-header-row">
+            <div>
+                <h1 class="dashboard-title">My Projects</h1>
+                <p class="dashboard-subtitle">Manage, update, and track feedback for all your published projects.</p>
             </div>
-        </a>
-        <div class="card-data">
-            <h4>{{ x.title }}</h4>
-            <p class="owner">By {{ x.owner |title }}</p>
-            <p>{{ x.vote_ratio }}% Positive Feedback ({{ x.vote_total }} Votes)</p>
-            <div class="card-tag">
-
-                {% for tag in x.tag.all %}
-                <span>{{ tag }}</span>
-                {% endfor %}
-            </div>
-
-            <div class="card-btn">
-                <a href="{% url 'update_project' x.id %}">Edit</a>
-                <a href="#delete-{{ x.id }}" class="delete-btn">Delete</a>
-            </div>
-            <div id="delete-{{ x.id }}" class="delete-overlay">
-                <div class="delete-box">
-                    <form method="POST" action="{% url 'delete_project' x.id %}">
-                        {% csrf_token %}
-
-                        <h3>Delete Project</h3>
-                        <p>Are you sure you want to delete <b>{{ x.title }}</b>?</p>
-
-                        <div class="delete-actions">
-                            <button type="submit" name="action" value="Confirm" class="btn-danger">
-                                Yes, Delete
-                            </button>
-                            <a href="#" class="btn-cancel">
-                                No
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
+            <a href="{% url 'CreateProject' %}" class="btn-new-project">
+                <i class="fa-solid fa-plus"></i>
+                <span>Add New Project</span>
+            </a>
         </div>
 
-    </div>
-    {% endfor %}
-</div>
+        <!-- SEARCH BAR -->
+        <div class="dashboard-search-container">
+            <form class="dash-search-form" method="GET" action="{% url 'view_project' %}">
+                <i class="fa-solid fa-magnifying-glass dash-search-icon"></i>
+                <input type="text" name="q" placeholder="Filter my projects by title or tech..." value="{{ search }}" class="dash-search-input">
+                <button type="submit" class="dash-search-btn">Search</button>
+            </form>
+        </div>
 
-{% endblock content %}
+        <!-- PROJECT MANAGEMENT GRID -->
+        <div class="my-projects-grid">
+            {% for x in data %}
+            <article class="my-project-card">
+                <div class="my-pcard-media">
+                    <a href="{% url 'project' x.id %}">
+                        {% if x.image_path %}
+                        <img src="{{ x.image_path.url }}" alt="{{ x.title }}" class="my-pcard-img">
+                        {% else %}
+                        <div class="my-pcard-fallback"><i class="fa-solid fa-code"></i></div>
+                        {% endif %}
+                    </a>
+                </div>
+
+                <div class="my-pcard-body">
+                    <h3 class="my-pcard-title">
+                        <a href="{% url 'project' x.id %}">{{ x.title }}</a>
+                    </h3>
+                    <p class="my-pcard-desc">{{ x.desc|default:"No description provided"|truncatewords:14 }}</p>
+
+                    <div class="my-pcard-meta">
+                        <span class="my-vote-badge">
+                            <i class="fa-solid fa-thumbs-up"></i> {{ x.vote_ratio }}% ({{ x.vote_total }} votes)
+                        </span>
+                    </div>
+
+                    <div class="my-pcard-tags">
+                        {% for tag in x.tag.all %}
+                        <span class="my-tag-pill">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="my-pcard-actions">
+                    <a href="{% url 'update_project' x.id %}" class="btn-action-edit">
+                        <i class="fa-solid fa-pen-to-square"></i> Edit
+                    </a>
+                    <a href="#delete-{{ x.id }}" class="btn-action-delete">
+                        <i class="fa-regular fa-trash-can"></i> Delete
+                    </a>
+                </div>
+
+                <!-- DELETE MODAL -->
+                <div id="delete-{{ x.id }}" class="modal-overlay">
+                    <div class="modal-dialog-box">
+                        <div class="modal-alert-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h3 class="modal-title">Delete Project</h3>
+                        <p class="modal-desc">Are you sure you want to permanently delete <strong>"{{ x.title }}"</strong>? This action cannot be undone.</p>
+
+                        <form method="POST" action="{% url 'delete_project' x.id %}">
+                            {% csrf_token %}
+                            <div class="modal-buttons-row">
+                                <a href="#" class="btn-modal-cancel">Cancel</a>
+                                <button type="submit" name="action" value="Confirm" class="btn-modal-confirm">
+                                    <i class="fa-solid fa-trash-can"></i> Delete Permanently
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </article>
+            {% empty %}
+            <div class="empty-state-box" style="grid-column: 1 / -1; margin: 20px 0;">
+                <div class="empty-icon-wrap"><i class="fa-solid fa-folder-plus"></i></div>
+                <h3>No Projects Published Yet</h3>
+                <p>You haven't uploaded any projects yet. Start by sharing your first creation with the community.</p>
+                <a href="{% url 'CreateProject' %}" class="empty-reset-btn">
+                    <i class="fa-solid fa-plus"></i> Publish Your First Project
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-bottom" style="margin-top:0; border-top:none;">
+            <p>&copy; 2026 NextDev Community. Creator Dashboard.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
