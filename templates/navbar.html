@@ -3,14 +3,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.3">
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.5">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 {% block navbar %}
 
 <header>
-    <!-- MOBILE MENU TOGGLE CHECKBOX -->
-    <input type="checkbox" id="menuToggle" hidden>
 
     <div class="main-nav">
         <!-- BRAND LOGO -->
@@ -22,16 +20,13 @@
             <span class="logo-badge">Pro</span>
         </a>
 
-        <label for="menuToggle" class="menu-icon" aria-label="Open Menu">
-            <i class="fa-solid fa-bars"></i>
-        </label>
+        <button type="button" class="menu-icon" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+            <i class="fa-solid fa-bars icon-open" aria-hidden="true"></i>
+            <i class="fa-solid fa-xmark icon-close" aria-hidden="true"></i>
+        </button>
 
         <!-- NAV MENU -->
-        <div class="nav-menu">
-            <label for="menuToggle" class="close-menu" aria-label="Close Menu">
-                <i class="fa-solid fa-xmark"></i>
-            </label>
-
+        <div class="nav-menu" id="primary-nav">
             <a href="{% url 'home' %}" class="nav-link">
                 <i class="fa-solid fa-layer-group"></i>
                 Projects
@@ -112,9 +107,58 @@
         </div>
     </div>
 
-    <!-- MOBILE OVERLAY -->
-    <label for="menuToggle" class="overlay-mobile"></label>
+    <div class="overlay-mobile" aria-hidden="true"></div>
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var header = document.querySelector('header');
+    var menuBtn = document.querySelector('.menu-icon');
+    var overlay = document.querySelector('.overlay-mobile');
+    var navMenu = document.getElementById('primary-nav');
+    if (!header || !menuBtn || !navMenu) return;
+
+    var desktopQuery = window.matchMedia('(min-width: 861px)');
+
+    function setMenuOpen(open) {
+        header.classList.toggle('menu-open', open);
+        menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.body.classList.toggle('nav-locked', open);
+    }
+
+    function closeMenu() {
+        setMenuOpen(false);
+    }
+
+    menuBtn.addEventListener('click', function () {
+        setMenuOpen(!header.classList.contains('menu-open'));
+    });
+
+    if (overlay) {
+        overlay.addEventListener('click', closeMenu);
+    }
+
+    navMenu.addEventListener('click', function (event) {
+        var link = event.target.closest('a');
+        if (link && !link.closest('.sidebar')) {
+            closeMenu();
+            return;
+        }
+        if (event.target.closest('.user-btn')) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeMenu();
+    });
+
+    desktopQuery.addEventListener('change', function (event) {
+        if (event.matches) closeMenu();
+    });
+});
+</script>
 
 {% if messages %}
 <div class="message-box">
