@@ -35,7 +35,6 @@ if not SECRET_KEY:
 # DEBUG
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
-
 # Allowed hosts
 ALLOWED_HOSTS = [
     "localhost",
@@ -253,3 +252,17 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # ============================================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+
+SECURE_SSL_REDIRECT = not DEBUG
+
+SESSION_COOKIE_SECURE = not DEBUG
+
+CSRF_COOKIE_SECURE = not DEBUG
+
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+
+SECURE_HSTS_PRELOAD = not DEBUG
