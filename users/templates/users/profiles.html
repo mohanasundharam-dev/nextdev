@@ -9,8 +9,67 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.1">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=3.0">
     <link rel="stylesheet" href="{% static 'css/profiles.css' %}?v=2.1">
+    <style>
+        @media screen and (max-width: 1024px) {
+            body {
+                padding-bottom: 92px;
+            }
+
+            header {
+                position: sticky !important;
+                top: 0 !important;
+                bottom: auto !important;
+                width: 100% !important;
+            }
+
+            header .main-nav .logo {
+                display: flex !important;
+            }
+
+            header .main-nav .nav-menu {
+                position: fixed !important;
+                top: auto !important;
+                right: 12px !important;
+                bottom: 12px !important;
+                left: 12px !important;
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: stretch !important;
+                justify-content: space-around !important;
+                width: auto !important;
+                height: 68px !important;
+                margin: 0 !important;
+                padding: 7px !important;
+                gap: 4px !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                z-index: 2000 !important;
+                background: rgba(255, 255, 255, 0.98) !important;
+                border: 1px solid #e2e8f0 !important;
+                border-radius: 22px !important;
+                box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18) !important;
+            }
+
+            header .main-nav .nav-menu > a,
+            header .main-nav .nav-menu > .user-btn {
+                display: flex !important;
+                flex: 1 1 0 !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                min-width: 0 !important;
+                height: 54px !important;
+                padding: 5px 3px !important;
+                border: 0 !important;
+                border-radius: 15px !important;
+                font-size: 0.68rem !important;
+                line-height: 1.1 !important;
+                white-space: nowrap !important;
+            }
+        }
+    </style>
 </head>
 
 <body>

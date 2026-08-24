@@ -185,9 +185,12 @@ header {
 
 /* User Profile Trigger Button */
 .user-btn {
-  width: 40px;
+  width: auto;
+  min-width: 40px;
   height: 40px;
-  border-radius: 50%;
+  padding: 0 14px;
+  gap: 7px;
+  border-radius: var(--radius-full);
   border: 2px solid var(--border);
   background: var(--surface);
   color: var(--text-main);
@@ -198,6 +201,19 @@ header {
   font-size: 1.15rem;
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
+}
+
+.user-btn span {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.user-avatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border-focus);
 }
 
 .user-btn:hover {
@@ -317,6 +333,16 @@ body.nav-locked {
   font-size: 48px;
   color: var(--primary);
   margin-bottom: 10px;
+}
+
+.sidebar-avatar {
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 10px;
+  border: 2px solid var(--border-focus);
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .profile h4 {
@@ -447,11 +473,40 @@ body.nav-locked {
   flex: 1;
 }
 
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .text-message {
+  flex: 1;
   font-size: 0.88rem;
   font-weight: 500;
   color: var(--text-main);
   line-height: 1.4;
+}
+
+.toast-close {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.toast-close:hover,
+.toast-close:focus-visible {
+  background: var(--surface-hover);
+  color: var(--text-main);
+  outline: none;
 }
 
 .toast.success .message-icon {
@@ -737,6 +792,108 @@ body.nav-locked {
     right: 16px;
     left: 16px;
     max-width: calc(100% - 32px);
+  }
+}
+
+/* Mobile app navigation override */
+@media screen and (max-width: 1024px) {
+  body {
+    padding-bottom: 92px;
+  }
+
+  header {
+    position: sticky !important;
+    top: 0 !important;
+    bottom: auto !important;
+    width: 100% !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  header .main-nav {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 60px !important;
+    padding: 10px 16px !important;
+  }
+
+  header .main-nav .logo {
+    display: flex !important;
+  }
+
+  header .main-nav .nav-menu {
+    position: fixed !important;
+    top: auto !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    left: 12px !important;
+    z-index: 2000 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: space-around !important;
+    width: auto !important;
+    height: 68px !important;
+    margin: 0 !important;
+    padding: 7px !important;
+    gap: 4px !important;
+    transform: none !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 22px !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18) !important;
+    overflow: visible !important;
+  }
+
+  header .main-nav .nav-menu > a,
+  header .main-nav .nav-menu > .user-btn {
+    display: flex !important;
+    flex: 1 1 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    min-width: 0 !important;
+    height: 54px !important;
+    margin: 0 !important;
+    padding: 5px 3px !important;
+    gap: 3px !important;
+    border: 0 !important;
+    border-radius: 15px !important;
+    font-size: 0.68rem !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+  }
+
+  header .main-nav .nav-menu > a > .nav-btn {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: 54px !important;
+    margin: 0 !important;
+    padding: 5px 3px !important;
+    gap: 3px !important;
+    background: transparent !important;
+    color: var(--text-muted) !important;
+    box-shadow: none !important;
+  }
+
+  header .main-nav .nav-menu i {
+    font-size: 1.08rem !important;
+  }
+
+  header .sidebar {
+    z-index: 2100 !important;
+    right: 0 !important;
+    max-width: 88vw !important;
+  }
+
+  header .overlay {
+    z-index: 2090 !important;
   }
 }
 

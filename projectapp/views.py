@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .models import Movie
+from .models import Movie, Tag
 from .forms import ProjectForm
 from django.db.models import Q
 from django.contrib.auth import get_user_model
@@ -32,6 +32,7 @@ def projects(request,i):
     context={"Singleproject":List}
     return render(request,'projects/project.html',context)
 
+@login_required
 def CreateProject(request):
     
     a = ProjectForm()
@@ -39,14 +40,27 @@ def CreateProject(request):
     if request.method=='POST':
         x = ProjectForm(request.POST,request.FILES)
         if x.is_valid():
-            x.save()
+            project = x.save(commit=False)
+            project.owner = request.user.profile
+            project.save()
+            x.save_m2m()
+            custom_names = {
+                name.strip() for name in x.cleaned_data.get('custom_technology', '').split(',')
+                if name.strip()
+            }
+            if custom_names:
+                project.technology.add(*[Tag.objects.get_or_create(name=name)[0] for name in custom_names])
             return redirect('home')
     context = { "FormData":a,
                "is_edit": False,}
     return render(request,'projects/CreateProjectFrom.html',context)
 
+@login_required
 def UpdateProject(request,i):
     data =  Movie.objects.get(id=i)
+
+    if data.owner != request.user.profile:
+        return redirect('home')
     
     form = ProjectForm(instance=data)
     

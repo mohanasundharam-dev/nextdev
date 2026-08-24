@@ -67,7 +67,7 @@
             <!-- PROFILE KEY METRICS -->
             <div class="hero-metrics-bar">
                 <div class="metric-item">
-                    <span class="metric-val">{{ user_profile.project_set.count }}</span>
+                    <span class="metric-val">{{ projects|length }}</span>
                     <span class="metric-lbl">Projects</span>
                 </div>
                 <div class="metric-item">
@@ -77,10 +77,6 @@
                 <div class="metric-item">
                     <span class="metric-val">{{ user_profile.skill_set.count }}</span>
                     <span class="metric-lbl">Skills</span>
-                </div>
-                <div class="metric-item">
-                    <span class="metric-val">100%</span>
-                    <span class="metric-lbl">Feedback</span>
                 </div>
             </div>
         </section>
@@ -187,11 +183,7 @@
                         {% for skill in user_profile.skill_set.all %}
                         <span class="skill-chip">{{ skill.name }}</span>
                         {% empty %}
-                        <span class="skill-chip">Python</span>
-                        <span class="skill-chip">Django</span>
-                        <span class="skill-chip">JavaScript</span>
-                        <span class="skill-chip">PostgreSQL</span>
-                        <span class="skill-chip">React</span>
+                        <span class="empty-hint">No skills added yet.</span>
                         {% endfor %}
                     </div>
                 </div>
@@ -200,23 +192,6 @@
 
             <!-- MAIN COLUMN -->
             <section class="profile-main-col">
-
-                <!-- AVAILABILITY CALLOUT -->
-                <div class="hire-callout-banner">
-                    <div class="hire-icon-wrap">
-                        <i class="fa-solid fa-briefcase"></i>
-                    </div>
-                    <div class="hire-info">
-                        <h4>Open to New Opportunities</h4>
-                        <p>Available for full-time engineering roles, freelance collaborations, and technical consulting.</p>
-                    </div>
-                    {% if user_profile.email %}
-                    <a href="mailto:{{ user_profile.email }}" class="hire-cta-btn">
-                        <span>Get in Touch</span>
-                        <i class="fa-solid fa-paper-plane"></i>
-                    </a>
-                    {% endif %}
-                </div>
 
                 <!-- ABOUT BIO -->
                 <div class="card-panel">
@@ -235,11 +210,11 @@
                 <!-- PROJECTS PORTFOLIO -->
                 <div class="card-panel">
                     <div class="panel-header-row">
-                        <h3 class="panel-heading"><i class="fa-solid fa-layer-group"></i> Portfolio Projects ({{ user_profile.project_set.count }})</h3>
+                        <h3 class="panel-heading"><i class="fa-solid fa-layer-group"></i> Portfolio Projects ({{ projects|length }})</h3>
                     </div>
 
                     <div class="portfolio-grid">
-                        {% for project in user_profile.project_set.all %}
+                        {% for project in projects %}
                         <article class="portfolio-card">
                             <div class="p-thumb">
                                 {% if project.image_path %}
@@ -260,10 +235,10 @@
                                 <p class="p-desc">{{ project.description|default:project.desc|truncatewords:14 }}</p>
                                 
                                 <div class="p-tags">
-                                    {% for tag in project.tags.all %}
+                                    {% for tag in project.technology.all %}
                                     <span class="p-tag">{{ tag.name }}</span>
                                     {% empty %}
-                                    {% for tag in project.tag.all %}
+                                    {% for tag in project.technology.all %}
                                     <span class="p-tag">{{ tag }}</span>
                                     {% endfor %}
                                     {% endfor %}

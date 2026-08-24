@@ -102,7 +102,7 @@
 
         <!-- TAGS CHIPS -->
         <div class="card-tags">
-          {% for tag in x.tag.all %}
+          {% for tag in x.technology.all %}
           <span class="tag-chip">{{ tag }}</span>
           {% empty %}
           <span class="tag-chip tag-subtle">Web Development</span>
@@ -594,8 +594,32 @@
   }
 
   @media (max-width: 640px) {
+    .main-wrapper {
+      padding: 24px 16px 60px;
+    }
+
+    .hero-section {
+      padding: 22px 0 28px;
+    }
+
+    .hero-tag {
+      padding: 5px 12px;
+      margin-bottom: 14px;
+      font-size: 0.72rem;
+    }
+
     .hero-headline {
-      font-size: 2rem;
+      max-width: 360px;
+      margin-bottom: 10px;
+      font-size: 1.7rem;
+      line-height: 1.25;
+    }
+
+    .hero-desc {
+      max-width: 360px;
+      margin-bottom: 22px;
+      font-size: 0.92rem;
+      line-height: 1.5;
     }
     
     .search-card {

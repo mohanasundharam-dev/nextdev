@@ -6,6 +6,110 @@
 <link rel="stylesheet" href="{% static 'css/navbar.css' %}?v=2.5">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+@media screen and (max-width: 1024px) {
+    body {
+        padding-bottom: 92px;
+    }
+
+    header {
+        position: sticky !important;
+        top: 0 !important;
+        bottom: auto !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    header .main-nav {
+        display: flex !important;
+        width: 100% !important;
+        min-height: 60px !important;
+        padding: 10px 16px !important;
+    }
+
+    header .main-nav .logo {
+        display: flex !important;
+    }
+
+    header .main-nav .nav-menu {
+        position: fixed !important;
+        inset: auto 12px 12px 12px !important;
+        z-index: 2000 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: stretch !important;
+        justify-content: space-around !important;
+        width: auto !important;
+        height: 68px !important;
+        margin: 0 !important;
+        padding: 7px !important;
+        gap: 4px !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 22px !important;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18) !important;
+        overflow: visible !important;
+    }
+
+    header .main-nav .nav-menu > a,
+    header .main-nav .nav-menu > .user-btn {
+        display: flex !important;
+        flex: 1 1 0 !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-direction: column !important;
+        min-width: 0 !important;
+        height: 54px !important;
+        margin: 0 !important;
+        padding: 5px 3px !important;
+        gap: 3px !important;
+        border: 0 !important;
+        border-radius: 15px !important;
+        font-size: 0.68rem !important;
+        line-height: 1.1 !important;
+        white-space: nowrap !important;
+    }
+
+    header .main-nav .nav-menu > .nav-btn {
+        background: transparent !important;
+        color: #64748b !important;
+        box-shadow: none !important;
+    }
+
+    header .main-nav .nav-menu > a > .nav-btn {
+        display: flex !important;
+        flex: 1 1 auto !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: 54px !important;
+        margin: 0 !important;
+        padding: 5px 3px !important;
+        gap: 3px !important;
+        background: transparent !important;
+        color: #64748b !important;
+        box-shadow: none !important;
+    }
+
+    header .main-nav .nav-menu i {
+        font-size: 1.08rem !important;
+    }
+
+    header .sidebar {
+        z-index: 2100 !important;
+        right: 0 !important;
+        max-width: 88vw !important;
+    }
+
+    header .overlay {
+        z-index: 2090 !important;
+    }
+}
+</style>
+
 {% block navbar %}
 
 <header>
@@ -20,145 +124,99 @@
             <span class="logo-badge">Pro</span>
         </a>
 
-        <button type="button" class="menu-icon" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
-            <i class="fa-solid fa-bars icon-open" aria-hidden="true"></i>
-            <i class="fa-solid fa-xmark icon-close" aria-hidden="true"></i>
-        </button>
+        {% if request.user.is_authenticated %}
+        <input type="checkbox" id="toggleSidebar" hidden>
+        {% endif %}
 
         <!-- NAV MENU -->
         <div class="nav-menu" id="primary-nav">
             <a href="{% url 'home' %}" class="nav-link">
                 <i class="fa-solid fa-layer-group"></i>
-                Projects
+                <span>Projects</span>
             </a>
             <a href="{% url 'profiles' %}" class="nav-link">
                 <i class="fa-solid fa-users"></i>
-                Developers
+                <span>Developers</span>
             </a>
 
             {% if request.user.is_authenticated %}
-            <a href="{% url 'CreateProject' %}" class="nav-btn">
+            <a href="{% url 'CreateProject' %}" class="nav-btn nav-create-link">
                 <i class="fa-solid fa-plus"></i>
-                New Project
+                <span>New Project</span>
             </a>
 
-            <!-- USER SIDEBAR TOGGLE -->
-            <input type="checkbox" id="toggleSidebar" hidden>
-
             <label for="toggleSidebar" class="user-btn" title="User Menu">
+                {% if user.profile.profile_image %}
+                <img class="user-avatar" src="{{ user.profile.profile_image.url }}" alt="{{ user.username }} profile photo">
+                {% else %}
                 <i class="fa-regular fa-user"></i>
+                {% endif %}
+                <span>Account</span>
             </label>
 
-            <label for="toggleSidebar" class="overlay"></label>
-
-            <aside class="sidebar">
-                <div class="sidebar-header">
-                    <h3>Account Menu</h3>
-                    <label for="toggleSidebar" class="close-btn"><i class="fa-solid fa-xmark"></i></label>
-                </div>
-
-                <div class="profile">
-                    <i class="fa-solid fa-circle-user"></i>
-                    <h4>{{ user.username }}</h4>
-                    <p>{{ user.email|default:user.username }}</p>
-                </div>
-
-                <ul>
-                    <li>
-                        <a href="{% url 'my-profile' %}">
-                            <i class="fa-regular fa-id-badge"></i> My Profile
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'EditProfile' %}">
-                            <i class="fa-solid fa-user-pen"></i> Edit Profile
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'view_project' %}">
-                            <i class="fa-solid fa-folder-open"></i> My Projects
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'CreateProject' %}">
-                            <i class="fa-solid fa-circle-plus"></i> Create Project
-                        </a>
-                    </li>
-                </ul>
-
-                <div class="sidebar-footer">
-                    <a href="{% url 'LogoutUser' %}">
-                        <button class="logout-btn">
-                            <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                            Logout
-                        </button>
-                    </a>
-                </div>
-            </aside>
-
             {% else %}
-            <a href="{% url 'LoginUser' %}">
-                <button class="nav-btn">
-                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                    Sign In
-                </button>
+            <a href="{% url 'LoginUser' %}" class="nav-btn">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <span>Sign In</span>
             </a>
             {% endif %}
         </div>
+
+        {% if request.user.is_authenticated %}
+        <label for="toggleSidebar" class="overlay"></label>
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Account Menu</h3>
+                <label for="toggleSidebar" class="close-btn"><i class="fa-solid fa-xmark"></i></label>
+            </div>
+
+            <div class="profile">
+                {% if user.profile.profile_image %}
+                <img class="sidebar-avatar" src="{{ user.profile.profile_image.url }}" alt="{{ user.username }} profile photo">
+                {% else %}
+                <i class="fa-solid fa-circle-user"></i>
+                {% endif %}
+                <h4>{{ user.profile.name|default:user.username }}</h4>
+                <p>@{{ user.username }}</p>
+            </div>
+
+            <ul>
+                <li>
+                    <a href="{% url 'my-profile' %}">
+                        <i class="fa-regular fa-id-badge"></i> My Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'EditProfile' %}">
+                        <i class="fa-solid fa-user-pen"></i> Edit Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'view_project' %}">
+                        <i class="fa-solid fa-folder-open"></i> My Projects
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'CreateProject' %}">
+                        <i class="fa-solid fa-circle-plus"></i> Create Project
+                    </a>
+                </li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="{% url 'LogoutUser' %}">
+                    <button class="logout-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        Logout
+                    </button>
+                </a>
+            </div>
+        </aside>
+        {% endif %}
     </div>
 
-    <div class="overlay-mobile" aria-hidden="true"></div>
 </header>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var header = document.querySelector('header');
-    var menuBtn = document.querySelector('.menu-icon');
-    var overlay = document.querySelector('.overlay-mobile');
-    var navMenu = document.getElementById('primary-nav');
-    if (!header || !menuBtn || !navMenu) return;
-
-    var desktopQuery = window.matchMedia('(min-width: 861px)');
-
-    function setMenuOpen(open) {
-        header.classList.toggle('menu-open', open);
-        menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-        document.body.classList.toggle('nav-locked', open);
-    }
-
-    function closeMenu() {
-        setMenuOpen(false);
-    }
-
-    menuBtn.addEventListener('click', function () {
-        setMenuOpen(!header.classList.contains('menu-open'));
-    });
-
-    if (overlay) {
-        overlay.addEventListener('click', closeMenu);
-    }
-
-    navMenu.addEventListener('click', function (event) {
-        var link = event.target.closest('a');
-        if (link && !link.closest('.sidebar')) {
-            closeMenu();
-            return;
-        }
-        if (event.target.closest('.user-btn')) {
-            closeMenu();
-        }
-    });
-
-    document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') closeMenu();
-    });
-
-    desktopQuery.addEventListener('change', function (event) {
-        if (event.matches) closeMenu();
-    });
-});
-</script>
 
 {% if messages %}
 <div class="message-box">
@@ -169,10 +227,23 @@ document.addEventListener('DOMContentLoaded', function () {
         {% for message in messages %}
         <div class="toast {{ message.tags|default:'info' }}">
             <p class="text-message">{{ message }}</p>
+            <button type="button" class="toast-close" aria-label="Close notification" title="Close notification">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            </button>
         </div>
         {% endfor %}
     </div>
 </div>
+<script>
+document.querySelectorAll('.toast-close').forEach(function (button) {
+    button.addEventListener('click', function () {
+        var toast = button.closest('.toast');
+        var messageBox = button.closest('.message-box');
+        if (toast) toast.remove();
+        if (messageBox && !messageBox.querySelector('.toast')) messageBox.remove();
+    });
+});
+</script>
 {% endif %}
 
 {% endblock navbar %}

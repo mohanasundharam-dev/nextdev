@@ -42,13 +42,28 @@
                     <!-- AVATAR UPLOAD PREVIEW -->
                     <div class="avatar-edit-box">
                         {% if user.profile.profile_image %}
-                        <img src="{{ user.profile.profile_image.url }}" class="current-avatar-preview" alt="Profile Avatar">
+                        <label for="{{ form.profile_image.id_for_label }}" class="avatar-preview-button" title="Choose a new profile photo">
+                            <img src="{{ user.profile.profile_image.url }}" class="current-avatar-preview" alt="Profile Avatar">
+                            <span class="avatar-edit-badge"><i class="fa-solid fa-camera"></i></span>
+                        </label>
                         {% else %}
-                        <div class="current-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+                        <label for="{{ form.profile_image.id_for_label }}" class="avatar-preview-button" title="Choose a profile photo">
+                            <div class="current-avatar-fallback"><i class="fa-solid fa-user"></i></div>
+                            <span class="avatar-edit-badge"><i class="fa-solid fa-camera"></i></span>
+                        </label>
                         {% endif %}
                         <div class="avatar-upload-info">
                             <label class="form-label">Profile Photo</label>
-                            {{ form.profile_image }}
+                            <input type="file" name="profile_image" id="{{ form.profile_image.id_for_label }}" accept="image/*" class="profile-image-input">
+                            <label for="{{ form.profile_image.id_for_label }}" class="choose-photo-button">
+                                <i class="fa-solid fa-upload"></i> Choose photo
+                            </label>
+                            {% if user.profile.profile_image %}
+                            <label class="clear-photo-option">
+                                <input type="checkbox" name="profile_image-clear" id="profile_image-clear">
+                                Remove current photo
+                            </label>
+                            {% endif %}
                         </div>
                     </div>
 
@@ -78,6 +93,40 @@
                     <div class="setting-field">
                         <label class="form-label">Availability Status</label>
                         {{ form.status }}
+                    </div>
+
+                    <div class="setting-field">
+                        <label class="form-label">Location</label>
+                        {{ form.location }}
+                        <datalist id="location-suggestions">
+                            <option value="Remote"></option>
+                            <option value="Chennai, India"></option>
+                            <option value="Bengaluru, India"></option>
+                            <option value="Hyderabad, India"></option>
+                            <option value="Mumbai, India"></option>
+                            <option value="New Delhi, India"></option>
+                            <option value="London, United Kingdom"></option>
+                            <option value="New York, United States"></option>
+                            <option value="San Francisco, United States"></option>
+                            <option value="Toronto, Canada"></option>
+                        </datalist>
+                        {% if form.location.help_text %}
+                        <small class="field-helper">{{ form.location.help_text }}</small>
+                        {% endif %}
+                        {% if form.location.errors %}
+                        <small class="error-text">{{ form.location.errors.0 }}</small>
+                        {% endif %}
+                    </div>
+
+                    <div class="setting-field">
+                        <label class="form-label">Skills</label>
+                        {{ form.skills }}
+                        {% if form.skills.help_text %}
+                        <small class="field-helper">{{ form.skills.help_text }}</small>
+                        {% endif %}
+                        {% if form.skills.errors %}
+                        <small class="error-text">{{ form.skills.errors.0 }}</small>
+                        {% endif %}
                     </div>
 
                     <div class="setting-field">
@@ -154,6 +203,25 @@
 </body>
 
 </html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var input = document.getElementById('{{ form.profile_image.id_for_label }}');
+    var preview = document.querySelector('.current-avatar-preview');
+    var clearOption = document.getElementById('profile_image-clear');
+    if (!input) return;
+
+    input.addEventListener('change', function () {
+        var file = input.files && input.files[0];
+        if (!file || !file.type.startsWith('image/')) return;
+        if (preview) {
+            preview.src = URL.createObjectURL(file);
+            preview.hidden = false;
+        }
+        if (clearOption) clearOption.checked = false;
+    });
+});
+</script>
 
 <style>
     .settings-page-wrapper {
@@ -235,6 +303,15 @@
         margin-bottom: 8px;
     }
 
+    .avatar-preview-button {
+        position: relative;
+        display: block;
+        width: 64px;
+        height: 64px;
+        flex: 0 0 64px;
+        cursor: pointer;
+    }
+
     .current-avatar-preview {
         width: 64px;
         height: 64px;
@@ -242,6 +319,60 @@
         object-fit: cover;
         border: 2px solid #6366f1;
         box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+    }
+
+    .avatar-preview-button .current-avatar-preview,
+    .avatar-preview-button .current-avatar-fallback {
+        width: 64px;
+        height: 64px;
+    }
+
+    .avatar-edit-badge {
+        position: absolute;
+        right: -4px;
+        bottom: -4px;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        background: #6366f1;
+        color: #ffffff;
+        font-size: 0.68rem;
+    }
+
+    .profile-image-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .choose-photo-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        width: fit-content;
+        padding: 7px 10px;
+        border: 1px solid #c7d2fe;
+        border-radius: 8px;
+        background: #eef2ff;
+        color: #4f46e5;
+        font-size: 0.78rem;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .clear-photo-option {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #64748b;
+        font-size: 0.76rem;
+        cursor: pointer;
     }
 
     .current-avatar-fallback {

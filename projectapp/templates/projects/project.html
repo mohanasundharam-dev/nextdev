@@ -35,7 +35,7 @@
             <div class="project-showcase-header">
                 <div class="header-main-info">
                     <div class="tag-row">
-                        {% for x in Singleproject.tag.all %}
+                        {% for x in Singleproject.technology.all %}
                         <span class="project-pill-tag">{{ x }}</span>
                         {% empty %}
                         <span class="project-pill-tag">Showcase</span>
@@ -129,7 +129,7 @@
                 <div class="content-section">
                     <h3 class="section-subheading"><i class="fa-solid fa-tags"></i> Technologies &amp; Tags</h3>
                     <div class="tags-full-list">
-                        {% for x in Singleproject.tag.all %}
+                        {% for x in Singleproject.technology.all %}
                         <div class="tech-tag-card">
                             <i class="fa-solid fa-hashtag"></i>
                             <span>{{ x }}</span>

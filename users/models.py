@@ -21,6 +21,7 @@ class Profile(models.Model):
     social_leetcode=models.CharField(max_length=200,blank=True,null=True)
     social_hackerrank=models.CharField(max_length=200,blank=True,null=True)
     portfolio=models.CharField(max_length=200,blank=True,null=True)
+    location=models.CharField(max_length=200,blank=True,null=True)
     created=models.DateTimeField(auto_now_add=True)
     role=models.CharField(max_length=50,blank=True,null=True)
     id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)

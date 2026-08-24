@@ -8,7 +8,7 @@ class Movie(models.Model):
     id=models.UUIDField(default=uuid.uuid4,unique=True,primary_key=True,editable=False)
     title = models.CharField(max_length=100)
     desc = models.TextField()
-    tag = models.ManyToManyField('Tag', blank=True)
+    technology = models.ManyToManyField('Tag', blank=True)
     demo_link=models.CharField(max_length=2000,null=True,blank=True)
     source_link=models.CharField(max_length=2000,null=True,blank=True)
     created=models.DateTimeField(auto_now_add=True)

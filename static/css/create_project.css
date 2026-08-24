@@ -39,8 +39,8 @@
 
 .form-grid-layout {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px 20px;
+  grid-template-columns: 1fr;
+  gap: 20px;
 }
 
 .form-group-block {
@@ -53,7 +53,7 @@
 }
 
 .form-group-block.col-half {
-  grid-column: span 1;
+  grid-column: 1 / -1;
 }
 
 /* Label */
@@ -107,7 +107,7 @@
 
 .input-wrap input[type="file"] {
   width: 100%;
-  padding: 10px;
+  padding: 8px;
   border: 2px dashed #cbd5e1;
   border-radius: 10px;
   background: #f8fafc;
@@ -115,6 +115,24 @@
   color: #64748b;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.input-wrap input[type="file"]::file-selector-button {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: #6366f1;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.input-wrap input[type="file"]:focus-visible {
+  outline: 3px solid rgba(99, 102, 241, 0.2);
+  outline-offset: 2px;
 }
 
 .input-wrap input[type="file"]:hover {

@@ -31,10 +31,12 @@ def user_profile(request, i):
     Profile.objects.filter(id=i).update(views=F('views') + 1)
         
     profile = get_object_or_404(Profile, id=i)
+    projects = Movie.objects.filter(owner=profile).prefetch_related('technology')
     
     return render(request, 'users/user_profile.html', {
         'user_profile': profile,
         'views': profile.views,
+        'projects': projects,
     })
 
 # def LoginUser(request):
@@ -178,10 +180,12 @@ def CreateProfile(request):
 @login_required
 def my_profile(request):
     user_profile, created = Profile.objects.get_or_create(user=request.user)
+    projects = Movie.objects.filter(owner=user_profile).prefetch_related('technology')
 
     return render(request, 'users/user_profile.html', {
         'user_profile': user_profile,
         'views': user_profile.views,
+        'projects': projects,
     })
 
 from django.shortcuts import redirect

@@ -35,7 +35,7 @@
 
             <div class="form-grid-layout">
                 {% for field in FormData %}
-                <div class="form-group-block {% if field.name == 'desc' or field.name == 'project_file' %}col-full{% elif field.name == 'demo_link' or field.name == 'source_link' %}col-half{% endif %}">
+                <div class="form-group-block {% if field.name == 'desc' %}col-full{% elif field.name == 'demo_link' or field.name == 'source_link' %}col-half{% endif %}">
                     <label for="{{ field.id_for_label }}" class="form-field-label">
                         {{ field.label }}
                         {% if field.field.required %}
