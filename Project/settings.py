@@ -20,10 +20,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # ============================================================
 
-# IMPORTANT:
-# Set SECRET_KEY in Render Environment Variables.
-# For local development, you can temporarily set it in your
-# environment as well.
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 if not SECRET_KEY:
@@ -32,21 +28,54 @@ if not SECRET_KEY:
     )
 
 
-# DEBUG
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 
 # Allowed hosts
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    ".onrender.com",
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1"
+    ).split(",")
+    if host.strip()
 ]
 
 
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-    "https://*.onrender.com",
+    origin.strip()
+    for origin in os.getenv(
+        "CSRF_TRUSTED_ORIGINS",
+        "http://localhost,http://127.0.0.1"
+    ).split(",")
+    if origin.strip()
 ]
+
+
+# ============================================================
+# PRODUCTION SECURITY
+# ============================================================
+
+if not DEBUG:
+
+    # Render terminates HTTPS at its proxy/load balancer.
+    SECURE_PROXY_SSL_HEADER = (
+        "HTTP_X_FORWARDED_PROTO",
+        "https",
+    )
+
+    SECURE_SSL_REDIRECT = True
+
+    SESSION_COOKIE_SECURE = True
+
+    CSRF_COOKIE_SECURE = True
+
+    SECURE_HSTS_SECONDS = 31536000
+
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+    SECURE_HSTS_PRELOAD = True
 
 
 # ============================================================
@@ -111,13 +140,13 @@ TEMPLATES = [
         "APP_DIRS": True,
 
         "OPTIONS": {
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
+                    "context_processors": [
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.request",
+                        "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
+                ],
+            },
     },
 ]
 
@@ -125,15 +154,6 @@ TEMPLATES = [
 # ============================================================
 # DATABASE
 # ============================================================
-
-# Local development:
-#     SQLite will be used automatically.
-#
-# Render:
-#     DATABASE_URL environment variable will be used.
-#
-# Example:
-# DATABASE_URL=postgresql://user:password@host/database
 
 DATABASES = {
     "default": dj_database_url.config(
@@ -194,16 +214,14 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-# Your source static directory
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
-# Render will collect files here
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
-# WhiteNoise configuration
+# WhiteNoise
 STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
@@ -239,7 +257,6 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
-# Set these in Render Environment Variables
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
@@ -252,17 +269,3 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # ============================================================
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
-
-SECURE_SSL_REDIRECT = not DEBUG
-
-SESSION_COOKIE_SECURE = not DEBUG
-
-CSRF_COOKIE_SECURE = not DEBUG
-
-SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0
-
-SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
-
-SECURE_HSTS_PRELOAD = not DEBUG
